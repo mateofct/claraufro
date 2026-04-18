@@ -21,6 +21,7 @@ public class Agrupacion {
         for (String recorrerID : this.idMiembros) {
             if (recorrerID.equals(idUsuario)) {
                 miembroExiste = false;
+                System.out.println("El usuario ya es miembro de la agrupación");
                 break;
             }
         }
@@ -28,5 +29,17 @@ public class Agrupacion {
             this.idMiembros.add(idUsuario);
 
         }
+    }
+    public void quitarMiembro(String idMiembro){
+        for (String recorrerID : this.idMiembros){
+            if (recorrerID.equals(idMiembro)){
+                this.idMiembros.remove(idMiembro);
+                System.out.println("El usuario ha sido removido de la agrupación");
+                break;
+            } else {
+                System.out.println("El usuario no es miembro de la agrupación");
+            }
+        }
+
     }
 }
