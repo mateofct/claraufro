@@ -13,8 +13,35 @@ public class Usuario {
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.rol = rol;
-
-
     }
+
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+    public String getIdAgrupacion() {
+        return idAgrupacion;
+    }
+    public String getNombre() {
+        return nombre;
+    }
+    public String getContraseña() {
+        return contraseña;
+    }
+    public RolUsuario getRol() {
+        return rol;
+    }
+
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
+    }
+    public void setRol(RolUsuario rol) {
+        this.rol = rol;
+    }
+
 
 }
