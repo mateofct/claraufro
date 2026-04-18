@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Agrupacion {
-    private String idAgrupacion,
+    private String idAgrupacion;
     private String nombreAgrupacion;
     private int saldoTotal;
     private List<String> idMiembros;
@@ -42,4 +42,27 @@ public class Agrupacion {
         }
 
     }
+
+    public String getIdAgrupacion(String idAgrupacion) {
+        return idAgrupacion;
+    }
+    public String getNombreAgrupacion(String nombreAgrupacion) {
+        return nombreAgrupacion;
+    }
+    public int getSaldoTotal(int saldoTotal){
+        return saldoTotal;
+    }
+    public List<String> getIdMiembros(List<String> idMiembros){
+        return idMiembros;
+    }
+
+
+
+    public void setNombreAgrupacion(String nombreAgrupacion){
+        this.nombreAgrupacion = nombreAgrupacion;
+    }
+    public void setSaldoTotal(int saldoTotal) {
+        this.saldoTotal = saldoTotal;
+    }
+
 }
