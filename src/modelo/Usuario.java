@@ -6,13 +6,15 @@ public class Usuario {
     private String nombre;
     private String contraseña;
     private RolUsuario rol;
+    private String matricula;
 
-    public Usuario(String idAgrupacion, String nombre, String contraseña, RolUsuario rol) {
+    public Usuario(String idAgrupacion, String nombre, String contraseña, RolUsuario rol, String matricula) {
         this.idUsuario = UUID.randomUUID().toString();
         this.idAgrupacion = idAgrupacion;
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.rol = rol;
+        this.matricula = matricula;
     }
 
 
@@ -30,6 +32,9 @@ public class Usuario {
     }
     public RolUsuario getRol() {
         return rol;
+    }
+    public String getMatricula() {
+        return matricula;
     }
 
 
