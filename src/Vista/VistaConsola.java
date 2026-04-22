@@ -61,13 +61,14 @@ public class VistaConsola {
     }
     public String[] pedirDatosLogin() {
         System.out.println("--- Iniciar Sesion ---");
+        System.out.println("Ingresa tu matricula:");
         String matricula = in.nextLine();
         System.out.println("Ingresa tu contraseña:");
         String contrasena = in.nextLine();
         return new String[]{matricula, contrasena};
     }
 
-    private void cerrar() {
+    public void cerrar() {
         in.close();
     }
 }
