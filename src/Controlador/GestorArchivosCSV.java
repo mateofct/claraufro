@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorArchivosCSV {
-    private static final String ARCHIVO_MOVIMIENTOS = "movimientos_clara.csv";
+    private static final String RUTA_MOVIMIENTOS = "data/movimientos_clara.csv";
 
     public static void guardarMovimiento(Movimiento mov) {
-        try (FileWriter fw = new FileWriter(ARCHIVO_MOVIMIENTOS, true);
+        try (FileWriter fw = new FileWriter(RUTA_MOVIMIENTOS, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
 
-            //sistema de separacion de datos por comas para el csv
             String linea = mov.getIdMovimiento() + "," +
                     mov.getIdAgrupacion() + "," +
                     mov.getTipoMovimiento() + "," +
@@ -32,7 +31,7 @@ public class GestorArchivosCSV {
 
     public static List<String[]> leerLineasMovimientos(String idAgrupacionBuscada) {
         List<String[]> lista = new ArrayList<>();
-        File archivo = new File(ARCHIVO_MOVIMIENTOS);
+        File archivo = new File(RUTA_MOVIMIENTOS);
 
         if (!archivo.exists()) {
             return lista;
