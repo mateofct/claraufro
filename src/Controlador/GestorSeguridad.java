@@ -11,4 +11,13 @@ public class GestorSeguridad {
         }
         return resultado.toString();
     }
+
+    public static String descifrar(String texto) {
+        if (texto == null) return null;
+        StringBuilder resultado = new StringBuilder();
+        for (char c : texto.toCharArray()) {
+            resultado.append((char) (c - DESPLAZAMIENTO));
+        }
+        return resultado.toString();
+    }
 }
