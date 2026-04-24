@@ -68,6 +68,17 @@ public class VistaConsola {
         return new String[]{matricula, contrasena};
     }
 
+    public String[] pedirDatosNuevoUsuario() {
+        System.out.println("\n--- Registrar Nuevo Usuario ---");
+        System.out.println("Ingresa la matricula:");
+        String matricula = in.nextLine();
+        System.out.println("Ingresa el nombre:");
+        String nombre = in.nextLine();
+        System.out.println("Ingresa la contraseña:");
+        String contrasena = in.nextLine();
+        return new String[]{matricula, nombre, contrasena};
+    }
+
     public int pedirMonto() {
         System.out.println("Ingrese el monto:");
         try {

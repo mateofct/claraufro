@@ -20,7 +20,9 @@ public class ControladorUsuario {
     public boolean iniciarSesion(String matricula, String contrasena) {
         for (Usuario usuario : usuarios) {
             if (usuario.getMatricula().equals(matricula)) {
-                if (usuario.getContraseña().equals(contrasena)) {
+
+                String contrasenaDescifrada = GestorSeguridad.descifrar(usuario.getContraseña());
+                if (contrasenaDescifrada.equals(contrasena)) {
                     this.usuarioActivo = usuario;
                     return true;
                 }
