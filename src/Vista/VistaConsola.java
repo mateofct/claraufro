@@ -20,10 +20,10 @@ public class VistaConsola {
         System.out.println("\n---- Menu Administrador - CLARA ----\n");
         System.out.println("Bienvenido, " + nombre);
         System.out.println("-- Agrupaciones --");
-        System.out.println("1. Crear agrupacion");
+        System.out.println("1. Crear agrupacion (pendiente)");
         System.out.println("-- Usuarios --");
-        System.out.println("2. Gestionar tesoreros");
-        System.out.println("3. Editar datos");
+        System.out.println("2. Registrar usuario");
+        System.out.println("3. Editar datos (pendiente");
         System.out.println("-- Consultas --");
         System.out.println("4. Ver saldo de una agrupacion");
         System.out.println("5. Ver historial de movimientos");
@@ -66,6 +66,34 @@ public class VistaConsola {
         System.out.println("Ingresa tu contraseña:");
         String contrasena = in.nextLine();
         return new String[]{matricula, contrasena};
+    }
+
+    public String[] pedirDatosNuevoUsuario() {
+        System.out.println("\n--- Registrar Nuevo Usuario ---");
+        System.out.println("Ingresa la matricula:");
+        String matricula = in.nextLine();
+        System.out.println("Ingresa el nombre:");
+        String nombre = in.nextLine();
+        System.out.println("Ingresa la contraseña:");
+        String contrasena = in.nextLine();
+        System.out.println("Ingresa el rol (1=tesorero, 2=socio):");
+        String opcionRol = in.nextLine();
+        return new String[]{matricula, nombre, contrasena, opcionRol};
+    }
+
+    public int pedirMonto() {
+        System.out.println("Ingrese el monto:");
+        try {
+            return Integer.parseInt(in.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Ingrese un número válido.");
+            return 0;
+        }
+    }
+
+    public String pedirDescripcion() {
+        System.out.println("Ingrese una descripcion del movimiento:");
+        return in.nextLine();
     }
 
     public void cerrar() {
