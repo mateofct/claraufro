@@ -2,27 +2,19 @@ package Controlador;
 
 import Modelo.Usuario;
 import Modelo.RolUsuario;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorUsuario {
     private List<Usuario> usuarios;
-
     private Usuario usuarioActivo;
 
     public ControladorUsuario() {
-        this.usuarios = new ArrayList<>();
+        this.usuarios = GestorArchivosCSV.cargarUsuarios();
         this.usuarioActivo = null;
 
-        Usuario admin = new Usuario("agrup-001", "admin", "123", RolUsuario.ADMIN, "1");
-        usuarios.add(admin);
-
-        Usuario tesorero = new Usuario("agrup-001", "tesorero", "123", RolUsuario.TESORERO, "2");
-        usuarios.add(tesorero);
-
-        Usuario socio = new Usuario("agrup-001", "socio", "123", RolUsuario.SOCIO, "3");
-        usuarios.add(socio);
+        if (this.usuarios.isEmpty()) {
+            registrarUsuario("agrup-001", "Admin", "123", RolUsuario.ADMIN, "1");
+        }
     }
 
     public boolean iniciarSesion(String matricula, String contrasena) {
@@ -31,27 +23,28 @@ public class ControladorUsuario {
                 if (usuario.getContraseña().equals(contrasena)) {
                     this.usuarioActivo = usuario;
                     return true;
-                } else {
-                    return false;
                 }
             }
         }
         return false;
     }
-    public void cerrarSesion() {
-        this.usuarioActivo = null;
-    }
-    public Usuario getUsuarioActivo() {
-        return usuarioActivo;
-    }
+
     public void registrarUsuario(String idAgrupacion, String nombre, String contrasena, RolUsuario rol, String matricula) {
-        for (Usuario usuario : usuarios) {
-            if (usuario.getMatricula().equals(matricula)) {
-                System.out.println("Ya existe un usuario con esa matricula.");
+        for (Usuario u : usuarios) {
+            if (u.getMatricula().equals(matricula)) {
+                System.out.println("Error: Matricula ya existe.");
+                return;
             }
         }
+
         Usuario nuevo = new Usuario(idAgrupacion, nombre, contrasena, rol, matricula);
         usuarios.add(nuevo);
-        System.out.println("Usuario registrado correctamente:" + nombre);
+
+        GestorArchivosCSV.guardarUsuario(nuevo);
+
+        System.out.println("Usuario registrado: " + nombre);
     }
+
+    public void cerrarSesion() { this.usuarioActivo = null; }
+    public Usuario getUsuarioActivo() { return usuarioActivo; }
 }
