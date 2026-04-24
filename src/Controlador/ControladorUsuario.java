@@ -15,8 +15,14 @@ public class ControladorUsuario {
         this.usuarios = new ArrayList<>();
         this.usuarioActivo = null;
 
-        Usuario admin = new Usuario("agrup-001", "chelo", "123", RolUsuario.ADMIN, "1");
+        Usuario admin = new Usuario("agrup-001", "admin", "123", RolUsuario.ADMIN, "1");
         usuarios.add(admin);
+
+        Usuario tesorero = new Usuario("agrup-001", "tesorero", "123", RolUsuario.TESORERO, "2");
+        usuarios.add(tesorero);
+
+        Usuario socio = new Usuario("agrup-001", "socio", "123", RolUsuario.SOCIO, "3");
+        usuarios.add(socio);
     }
 
     public boolean iniciarSesion(String matricula, String contrasena) {
