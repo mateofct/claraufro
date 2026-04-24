@@ -68,6 +68,21 @@ public class VistaConsola {
         return new String[]{matricula, contrasena};
     }
 
+    public int pedirMonto() {
+        System.out.println("Ingrese el monto:");
+        try {
+            return Integer.parseInt(in.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Ingrese un número válido.");
+            return 0;
+        }
+    }
+
+    public String pedirDescripcion() {
+        System.out.println("Ingrese una descripcion del movimiento:");
+        return in.nextLine();
+    }
+
     public void cerrar() {
         in.close();
     }
