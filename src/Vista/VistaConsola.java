@@ -20,10 +20,10 @@ public class VistaConsola {
         System.out.println("\n---- Menu Administrador - CLARA ----\n");
         System.out.println("Bienvenido, " + nombre);
         System.out.println("-- Agrupaciones --");
-        System.out.println("1. Crear agrupacion");
+        System.out.println("1. Crear agrupacion (pendiente)");
         System.out.println("-- Usuarios --");
-        System.out.println("2. Registrar tesoreros");
-        System.out.println("3. Editar datos");
+        System.out.println("2. Registrar usuario");
+        System.out.println("3. Editar datos (pendiente");
         System.out.println("-- Consultas --");
         System.out.println("4. Ver saldo de una agrupacion");
         System.out.println("5. Ver historial de movimientos");
@@ -76,7 +76,9 @@ public class VistaConsola {
         String nombre = in.nextLine();
         System.out.println("Ingresa la contraseña:");
         String contrasena = in.nextLine();
-        return new String[]{matricula, nombre, contrasena};
+        System.out.println("Ingresa el rol (1=tesorero, 2=socio):");
+        String opcionRol = in.nextLine();
+        return new String[]{matricula, nombre, contrasena, opcionRol};
     }
 
     public int pedirMonto() {

@@ -39,16 +39,31 @@ public class Main {
     }
 
     private static boolean manejarMenuAdmin(String opcion, VistaConsola vista, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+        Usuario activo = controladorUsuario.getUsuarioActivo();
         switch (opcion) {
             case "2":
                 String[] datos = vista.pedirDatosNuevoUsuario();
-                // variables: datos[0] = matricula, datos[1] = nombre, datos[2] = contrasena
-                controladorUsuario.registrarUsuario("agrup-001", datos[1], datos[2], RolUsuario.TESORERO, datos[0]);
+                RolUsuario rolElegido;
+                if (datos[3].equals("1")) {
+                    rolElegido = RolUsuario.TESORERO;
+                } else if (datos[3].equals("2")) {
+                    rolElegido = RolUsuario.SOCIO;
+                } else {
+                    System.out.println("Opcion no valida. Intenta de nuevo.");
+                    return true;
+                }
+                controladorUsuario.registrarUsuario("agrup-001", datos[1], datos[2], rolElegido, datos[0]);
                 return true;
             case "6":
                 controladorUsuario.cerrarSesion();
                 System.out.println("Hasta luego...");
                 return false;
+            case "4":
+                System.out.println("\nSaldo actual de la agrupacion: $" + controladorFinanzas.calcularSaldo(activo.getIdAgrupacion()));
+                return true;
+            case "5":
+                controladorFinanzas.mostrarHistorial(activo.getIdAgrupacion());
+                return true;
             default:
                 System.out.println("Opcion no implementada aun. Elige otra.");
                 return true;
