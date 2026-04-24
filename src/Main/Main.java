@@ -2,13 +2,15 @@ package Main;
 
 import Vista.VistaConsola;
 import Controlador.ControladorUsuario;
+import Controlador.ControladorFinanzas;
 import Modelo.Usuario;
-import Modelo.RolUsuario;
+import Modelo.TipoMovimiento;
 
 public class Main {
     public static void main(String[] args) {
         VistaConsola vista = new VistaConsola();
         ControladorUsuario controladorUsuario = new ControladorUsuario();
+        ControladorFinanzas controladorFinanzas = new ControladorFinanzas();
         boolean corriendo = true;
 
         while (corriendo) {
@@ -19,7 +21,7 @@ public class Main {
                     String[] datosLogin = vista.pedirDatosLogin();
                     boolean loginExitoso = controladorUsuario.iniciarSesion(datosLogin[0], datosLogin[1]);
                     if (loginExitoso) {
-                        corriendo = manejarSesion(vista, controladorUsuario);
+                        manejarSesion(vista, controladorUsuario, controladorFinanzas);
                     } else {
                         System.out.println("Matricula o contraseña incorrecta. Intenta de nuevo.");
                     }
@@ -35,8 +37,7 @@ public class Main {
         vista.cerrar();
     }
 
-    //TODO
-    private static boolean manejarMenuAdmin(String opcion, ControladorUsuario controladorUsuario) {
+    private static boolean manejarMenuAdmin(String opcion, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         switch (opcion) {
             case "6":
                 controladorUsuario.cerrarSesion();
@@ -47,59 +48,78 @@ public class Main {
                 return true;
         }
     }
-    //TODO
-    private static boolean manejarMenuTesorero(String opcion, ControladorUsuario controladorUsuario) {
+
+    private static boolean manejarMenuTesorero(String opcion, VistaConsola vista, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+        Usuario activo = controladorUsuario.getUsuarioActivo();
         switch (opcion) {
+            case "1":
+                int montoI = vista.pedirMonto();
+                String descI = vista.pedirDescripcion();
+                controladorFinanzas.registrarMovimiento(activo.getIdAgrupacion(), TipoMovimiento.INGRESO, montoI, descI, "comprobante_default.jpg", activo.getIdUsuario());
+                return true;
+            case "2":
+                int montoE = vista.pedirMonto();
+                String descE = vista.pedirDescripcion();
+                controladorFinanzas.registrarMovimiento(activo.getIdAgrupacion(), TipoMovimiento.EGRESO, montoE, descE, "comprobante_default.jpg", activo.getIdUsuario());
+                return true;
+            case "3":
+                System.out.println("\nSaldo actual: $" + controladorFinanzas.calcularSaldo(activo.getIdAgrupacion()));
+                return true;
+            case "4":
+                controladorFinanzas.mostrarHistorial(activo.getIdAgrupacion());
+                return true;
             case "5":
                 controladorUsuario.cerrarSesion();
                 System.out.println("Hasta luego...");
                 return false;
             default:
-                System.out.println("Opcion no implementada aun. Elige otra.");
+                System.out.println("Opcion no valida.");
                 return true;
         }
     }
-    //TODO
-    private static boolean manejarMenuSocio(String opcion, ControladorUsuario controladorUsuario) {
+
+    private static boolean manejarMenuSocio(String opcion, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+        Usuario activo = controladorUsuario.getUsuarioActivo();
         switch (opcion) {
+            case "1":
+                System.out.println("\nSaldo actual: $" + controladorFinanzas.calcularSaldo(activo.getIdAgrupacion()));
+                return true;
+            case "2":
+                controladorFinanzas.mostrarHistorial(activo.getIdAgrupacion());
+                return true;
             case "3":
                 controladorUsuario.cerrarSesion();
                 System.out.println("Hasta luego...");
                 return false;
             default:
-                System.out.println("Opcion no implementada aun. Elige otra.");
+                System.out.println("Opcion no valida.");
                 return true;
         }
     }
 
-    // Esto es para manejar el menu según el usuario que ingresó, enSesion es para que se inicie, false si termina.
-    private static boolean manejarSesion(VistaConsola vista, ControladorUsuario controladorUsuario) {
-        Usuario activo = controladorUsuario.getUsuarioActivo();
+    private static void manejarSesion(VistaConsola vista, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         boolean enSesion = true;
 
         while (enSesion) {
+            Usuario activo = controladorUsuario.getUsuarioActivo();
             String opcion;
 
             switch (activo.getRol()) {
                 case ADMIN:
                     opcion = vista.mostrarMenuAdministrador(activo.getNombre());
-                    enSesion = manejarMenuAdmin(opcion, controladorUsuario);
+                    enSesion = manejarMenuAdmin(opcion, controladorUsuario, controladorFinanzas);
                     break;
                 case TESORERO:
                     opcion = vista.mostrarMenuTesorero(activo.getNombre());
-                    enSesion = manejarMenuTesorero(opcion, controladorUsuario);
+                    enSesion = manejarMenuTesorero(opcion, vista, controladorUsuario, controladorFinanzas);
                     break;
                 case SOCIO:
                     opcion = vista.mostrarMenuSocio(activo.getNombre());
-                    enSesion = manejarMenuSocio(opcion, controladorUsuario);
+                    enSesion = manejarMenuSocio(opcion, controladorUsuario, controladorFinanzas);
                     break;
-
                 default:
-                    System.out.println("Rol no reconocido. Cerrando sesion.");
                     enSesion = false;
             }
         }
-        return true;
     }
-
 }
