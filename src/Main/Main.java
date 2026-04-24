@@ -5,6 +5,7 @@ import Controlador.ControladorUsuario;
 import Controlador.ControladorFinanzas;
 import Modelo.Usuario;
 import Modelo.TipoMovimiento;
+import Modelo.RolUsuario;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,8 +38,13 @@ public class Main {
         vista.cerrar();
     }
 
-    private static boolean manejarMenuAdmin(String opcion, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    private static boolean manejarMenuAdmin(String opcion, VistaConsola vista, ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         switch (opcion) {
+            case "2":
+                String[] datos = vista.pedirDatosNuevoUsuario();
+                // variables: datos[0] = matricula, datos[1] = nombre, datos[2] = contrasena
+                controladorUsuario.registrarUsuario("agrup-001", datos[1], datos[2], RolUsuario.TESORERO, datos[0]);
+                return true;
             case "6":
                 controladorUsuario.cerrarSesion();
                 System.out.println("Hasta luego...");
@@ -107,7 +113,7 @@ public class Main {
             switch (activo.getRol()) {
                 case ADMIN:
                     opcion = vista.mostrarMenuAdministrador(activo.getNombre());
-                    enSesion = manejarMenuAdmin(opcion, controladorUsuario, controladorFinanzas);
+                    enSesion = manejarMenuAdmin(opcion, vista, controladorUsuario, controladorFinanzas);
                     break;
                 case TESORERO:
                     opcion = vista.mostrarMenuTesorero(activo.getNombre());

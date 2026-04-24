@@ -22,7 +22,7 @@ public class VistaConsola {
         System.out.println("-- Agrupaciones --");
         System.out.println("1. Crear agrupacion");
         System.out.println("-- Usuarios --");
-        System.out.println("2. Gestionar tesoreros");
+        System.out.println("2. Registrar tesoreros");
         System.out.println("3. Editar datos");
         System.out.println("-- Consultas --");
         System.out.println("4. Ver saldo de una agrupacion");
