@@ -36,8 +36,8 @@ public class ControladorUsuario {
                 return;
             }
         }
-
-        Usuario nuevo = new Usuario(idAgrupacion, nombre, contrasena, rol, matricula);
+        String contrasenaCifrada = GestorSeguridad.cifrar(contrasena);
+        Usuario nuevo = new Usuario(idAgrupacion, nombre, contrasenaCifrada, rol, matricula);
         usuarios.add(nuevo);
 
         GestorArchivosCSV.guardarUsuario(nuevo);
@@ -45,6 +45,10 @@ public class ControladorUsuario {
         System.out.println("Usuario registrado: " + nombre);
     }
 
-    public void cerrarSesion() { this.usuarioActivo = null; }
-    public Usuario getUsuarioActivo() { return usuarioActivo; }
+    public void cerrarSesion() {
+        this.usuarioActivo = null;
+    }
+    public Usuario getUsuarioActivo() {
+        return usuarioActivo;
+    }
 }
