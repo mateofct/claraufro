@@ -35,6 +35,6 @@ Permite el registro, seguimiento y auditoría transparente de ingresos y egresos
 - **Gestión de comprobantes (imágenes/PDF).**
 
 ## Autores y Contribuciones:
-- **Ying Shi Huang Guo**: Programación de paquete Modelo
-- **Marcelo Alexis Vega Fernández**: Programación de paquete Vista
-- **Mateo Francisco Cortés Torres**: Programación de paquete Controlador
+- **Ying Shi Huang Guo**: Programación de paquete `src/Modelo`.
+- **Marcelo Alexis Vega Fernández**: Programación de paquete `src/Vista`.
+- **Mateo Francisco Cortés Torres**: Programación de paquete `src/Controlador`.
