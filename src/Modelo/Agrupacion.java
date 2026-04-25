@@ -27,42 +27,39 @@ public class Agrupacion {
         }
         if (miembroExiste) {
             this.idMiembros.add(idUsuario);
-
         }
     }
+
     public void quitarMiembro(String idMiembro){
-        for (String recorrerID : this.idMiembros){
-            if (recorrerID.equals(idMiembro)){
-                this.idMiembros.remove(idMiembro);
-                System.out.println("El usuario ha sido removido de la agrupación");
-                break;
-            } else {
-                System.out.println("El usuario no es miembro de la agrupación");
-            }
+        if (this.idMiembros.contains(idMiembro)) {
+            this.idMiembros.remove(idMiembro);
+            System.out.println("El usuario ha sido removido de la agrupación");
+        } else {
+            System.out.println("El usuario no es miembro de la agrupación");
         }
-
     }
 
-    public String getIdAgrupacion(String idAgrupacion) {
-        return idAgrupacion;
-    }
-    public String getNombreAgrupacion(String nombreAgrupacion) {
-        return nombreAgrupacion;
-    }
-    public int getSaldoTotal(int saldoTotal){
-        return saldoTotal;
-    }
-    public List<String> getIdMiembros(List<String> idMiembros){
-        return idMiembros;
+    public String getIdAgrupacion() {
+        return this.idAgrupacion;
     }
 
+    public String getNombreAgrupacion() {
+        return this.nombreAgrupacion;
+    }
 
+    public int getSaldoTotal(){
+        return this.saldoTotal;
+    }
+
+    public List<String> getIdMiembros(){
+        return this.idMiembros;
+    }
 
     public void setNombreAgrupacion(String nombreAgrupacion){
         this.nombreAgrupacion = nombreAgrupacion;
     }
+
     public void setSaldoTotal(int saldoTotal) {
         this.saldoTotal = saldoTotal;
     }
-
 }
