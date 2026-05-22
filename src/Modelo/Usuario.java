@@ -19,6 +19,7 @@ public class Usuario {
 
 
     public String getIdUsuario() {
+
         return idUsuario;
     }
     public String getIdAgrupacion() {

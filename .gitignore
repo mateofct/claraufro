@@ -1,0 +1,15 @@
+# Configuraciones de IntelliJ IDEA
+.idea/
+*.iml
+
+# Carpetas de compilación y salida de Java
+out/
+bin/
+target/
+
+# Archivos compilados individuales
+*.class
+
+# Archivos del sistema operativo (opcional pero recomendado)
+.DS_Store
+Thumbs.db

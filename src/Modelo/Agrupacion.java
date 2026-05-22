@@ -44,7 +44,7 @@ public class Agrupacion {
     }
 
     public String getIdAgrupacion(String idAgrupacion) {
-        return this.idAgrupacion;
+        return idAgrupacion;
     }
     public String getNombreAgrupacion(String nombreAgrupacion) {
         return nombreAgrupacion;
