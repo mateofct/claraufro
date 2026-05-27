@@ -1,25 +1,24 @@
 package Vista;
+
 import javax.swing.*;
 import java.awt.*;
+import Controlador.ControladorFinanzas;
+import Controlador.ControladorUsuario;
 
-public class VentanaIniciarSesion {
+
+public class VentanaIniciarSesion extends JFrame {
 
     private final JFrame frame = new JFrame();
     private JTextField EscribirMatricula;
     private JPasswordField EscribirContraseña;
-    private JButton btnIngresar;
+    private ControladorFinanzas controladorFinanzas;
+    private ControladorUsuario controladorUsuario;
 
 
-    public VentanaIniciarSesion(){
-
+    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas){
+        this.controladorUsuario = controladorUsuario;
+        this.controladorFinanzas = controladorFinanzas;
     }
-
-    private void UISension() {
-        frame.setTitle("Iniciar Sesión - CLARA");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-        frame.setLocationRelativeTo(null);
-
 
 }
 
