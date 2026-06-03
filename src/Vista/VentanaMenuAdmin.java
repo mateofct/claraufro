@@ -15,7 +15,7 @@ public class VentanaMenuAdmin extends JFrame{
         this.controladorFinanzas = controladorFinanzas;
         String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
 
-        setTitle("CLARA - Menu Administrador");
+        setTitle("CLARA - Menú Administrador");
         setSize(400, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -54,7 +54,6 @@ public class VentanaMenuAdmin extends JFrame{
 
         botonRegistrarUsuario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 new VentanaRegistrarUsuario(controladorUsuario, VentanaMenuAdmin.this);
             }
         });
@@ -109,7 +108,7 @@ public class VentanaMenuAdmin extends JFrame{
         });
         add(botonCerrarSesion);
         setVisible(true);
-
+    }
 
 
 

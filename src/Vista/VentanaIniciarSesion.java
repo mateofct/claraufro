@@ -16,7 +16,7 @@ public class VentanaIniciarSesion extends JFrame {
     private ControladorFinanzas controladorFinanzas;
     private ControladorUsuario controladorUsuario;
 
-    public VentanaIniciarSesion(ControladorFinanzas controladorFinanzas, ControladorUsuario controladorUsuario) {
+    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         this.controladorFinanzas = controladorFinanzas;
         this.controladorUsuario = controladorUsuario;
         setTitle("Iniciar Sesión - CLARA");
