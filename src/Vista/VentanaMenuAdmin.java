@@ -54,7 +54,7 @@ public class VentanaMenuAdmin extends JFrame{
 
         botonRegistrarUsuario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new VentanaRegistrarUsuario(controladorUsuario, VentanaMenuAdmin.this);
+                new VentanaRegistrarUsuario(controladorUsuario);
             }
         });
         add(botonRegistrarUsuario);
@@ -73,7 +73,7 @@ public class VentanaMenuAdmin extends JFrame{
 
         botonVerSaldo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo(), VentanaMenuAdmin.this);
+                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo());
             }
         });
         add(botonVerSaldo);
@@ -87,7 +87,7 @@ public class VentanaMenuAdmin extends JFrame{
 
         botonHistorial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo(), VentanaMenuAdmin.this);
+                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo());
             }
         });
         add(botonHistorial);

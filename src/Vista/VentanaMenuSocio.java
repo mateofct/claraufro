@@ -53,7 +53,7 @@ public class VentanaMenuSocio extends JFrame {
         botonVerSaldo.setHorizontalAlignment(JButton.LEFT);
         botonVerSaldo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo(), VentanaMenuSocio.this);
+                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo());
             }
         });
         add(botonVerSaldo);
@@ -65,7 +65,7 @@ public class VentanaMenuSocio extends JFrame {
         botonHistorial.setHorizontalAlignment(JButton.LEFT);
         botonHistorial.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo(), VentanaMenuSocio.this);
+                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo());
             }
         });
         add(botonHistorial);
