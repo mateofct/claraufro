@@ -29,7 +29,7 @@ public class GestorArchivosCSV {
             out.println(linea);
 
         } catch (IOException e) {
-            System.out.println("Error al guardar CSV: " + e.getMessage());
+            throw new RuntimeException("Error al guardar CSV: " + e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class GestorArchivosCSV {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error al leer CSV: " + e.getMessage());
+            throw new RuntimeException("Error al leer CSV: " + e.getMessage());
         }
         return lista;
     }
@@ -71,7 +71,7 @@ public class GestorArchivosCSV {
             out.println(linea);
 
         } catch (IOException e) {
-            System.out.println("Error al guardar usuario: " + e.getMessage());
+            throw new RuntimeException("Error al guardar usuario: " + e.getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ public class GestorArchivosCSV {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error al cargar usuarios: " + e.getMessage());
+            throw new RuntimeException("Error al cargar usuarios: " + e.getMessage());
         }
         return lista;
     }
