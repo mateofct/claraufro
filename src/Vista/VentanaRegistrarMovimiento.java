@@ -6,20 +6,21 @@ import Modelo.TipoMovimiento;
 import Controlador.ControladorFinanzas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class VentanaRegistrarMovimiento extends JFrame{
     private ControladorFinanzas controladorFinanzas;
     private Usuario usuario;
     private boolean Ingreso;
-    private String rutaComprobante;
     private JTextField EscribirMonto;
     private JTextField EscribirDescripcion;
+    private File archivoComprobante = null;
 
-    public VentanaRegistrarMovimiento(ControladorFinanzas controladorFinanzas, Usuario usuario, boolean Ingreso, String rutaComprobante){
+    public VentanaRegistrarMovimiento(ControladorFinanzas controladorFinanzas, Usuario usuario, boolean Ingreso){
         this.controladorFinanzas = controladorFinanzas;
         this.usuario = usuario;
         this.Ingreso = Ingreso;
-        this.rutaComprobante = rutaComprobante;
+
 
         if (Ingreso) {
             setTitle("Registrar Ingreso");
@@ -78,6 +79,31 @@ public class VentanaRegistrarMovimiento extends JFrame{
         EscribirDescripcion.setBounds(20, 180, 340, 35);
         add(EscribirDescripcion);
 
+        JLabel etiquetaComprobante = new JLabel("Comprobante del movimiento:");
+        etiquetaComprobante.setFont(new Font("Arial", Font.BOLD, 13));
+        etiquetaComprobante.setBounds(20, 228, 340, 20);
+        add(etiquetaComprobante);
+
+        JButton botonSubirPDF = new JButton("Seleccionar archivo PDF del comprobante");
+        botonSubirPDF.setFont(new Font("Arial", Font.PLAIN, 13));
+        botonSubirPDF.setBackground(Color.WHITE);
+        botonSubirPDF.setBounds(20, 250, 340, 35);
+
+        botonSubirPDF.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser seleccionador = new JFileChooser();
+                seleccionador.setDialogTitle("Seleccione el PDF del Comprobante");
+                int resultado = seleccionador.showOpenDialog(VentanaRegistrarMovimiento.this);
+
+                if (resultado == JFileChooser.APPROVE_OPTION) {
+                    archivoComprobante = seleccionador.getSelectedFile();
+                    botonSubirPDF.setText("Archivo subido: " + archivoComprobante.getName());
+                    botonSubirPDF.setBackground(new Color(210, 235, 220));
+                }
+            }
+        });
+        add(botonSubirPDF);
+
         JLabel RegistroUsuario = new JLabel("Registrado por: " + usuario.getNombre());
         RegistroUsuario.setFont(new Font("Arial", Font.ITALIC, 11));
         RegistroUsuario.setForeground(Color.GRAY);
@@ -123,28 +149,16 @@ public class VentanaRegistrarMovimiento extends JFrame{
     private void guardarMovimiento() {
         String montoTexto   = EscribirMonto.getText().trim();
         String descripcion  = EscribirDescripcion.getText().trim();
-        int monto;
-
-        try {
-            monto = Integer.parseInt(montoTexto);
-        } catch (NumberFormatException error) {
-            JOptionPane.showMessageDialog(this, "El monto debe ser un número entero");
-            return;
-        }
-
-        if (monto <= 0) {
-            JOptionPane.showMessageDialog(this, "El monto no puede ser negativo o cero");
-            return;
-        }
-
+        int monto = Integer.parseInt(montoTexto);
         TipoMovimiento tipo;
+
         if (Ingreso) {
             tipo = TipoMovimiento.INGRESO;
         } else {
             tipo = TipoMovimiento.EGRESO;
         }
 
-        controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, descripcion, rutaComprobante, usuario.getIdUsuario());
+        controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, descripcion, archivoComprobante, usuario.getIdUsuario());
         JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente");
         dispose();
     }
