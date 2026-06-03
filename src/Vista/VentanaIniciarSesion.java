@@ -60,7 +60,7 @@ public class VentanaIniciarSesion extends JFrame {
 
         JButton botonIngresar = new JButton("Iniciar Sesion");
         botonIngresar.setFont(new Font("Arial", Font.BOLD, 14));
-        botonIngresar.setBackground(new Color(225, 228, 237)); // fondo azul
+        botonIngresar.setBackground(new Color(225, 228, 237));
         botonIngresar.setForeground(Color.black);
         botonIngresar.setBounds(60, 265, 270, 40);
 
