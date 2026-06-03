@@ -62,6 +62,9 @@ public class ControladorFinanzas {
         List<String[]> todos = GestorArchivosCSV.leerLineasMovimientos(idAgrupacion);
         List<String[]> resultado = new ArrayList<>();
 
+        String fechaLimpia = (fechaBuscada != null) ? fechaBuscada.trim() : "";
+        String tipoLimpio = (tipoBuscado != null) ? tipoBuscado.trim() : "";
+
         for  (String[] mov : todos) {
             // se ignoran las filas incompletas
             if (mov.length < 8) continue;

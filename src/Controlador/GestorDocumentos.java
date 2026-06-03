@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public class GestorDocumentos {
     private static final String RUTA_COMPROBANTES = "data/comprobantes";
+    private static final long TAMAÑO_MAXIMO = 5 * 1024 * 1024;
 
     public GestorDocumentos() {
         verificarCarpetaComprobantes();
@@ -19,7 +20,7 @@ public class GestorDocumentos {
     private void verificarCarpetaComprobantes() {
         File directorio = new File(RUTA_COMPROBANTES);
         if (!directorio.exists()) {
-            directorio.mkdir();
+            directorio.mkdirs();
         }
     }
 
@@ -30,12 +31,18 @@ public class GestorDocumentos {
 
         File archivoOrigen = new File(rutaOrigen);
         if (!archivoOrigen.exists()) {
-            System.out.println("Error: El archivo original no existe.");
-            return "sincomprobante.jpg";
+            throw new IllegalArgumentException("Error: El archivo original no existe.");
         }
 
+        if (archivoOrigen.length() > TAMAÑO_MAXIMO) {
+            throw new IllegalArgumentException("El archivo es muy pesado, el límite es de 5MB");
+        }
+
+        String nombreOriginal = archivoOrigen.getName().toLowerCase();
+        if (!nombreOriginal.endsWith(".pdf") && !nombreOriginal.endsWith(".jpg") && !nombreOriginal.endsWith(".jpeg") && !nombreOriginal.endsWith(".png")) {
+            throw new IllegalArgumentException("Formato no permitido. Solo se acepta PDF, JPG, JPEG o PNG.");
+        }
         try {
-            String nombreOriginal = archivoOrigen.getName();
             String extension = "";
             int i = nombreOriginal.lastIndexOf('.');
             if (i > 0) {
@@ -48,8 +55,7 @@ public class GestorDocumentos {
             return nuevoNombre;
 
         } catch (IOException e) {
-            System.out.println("Error al copiar el comprobante " + e.getMessage());
-            return "sincomprobante.jpg";
+            throw new RuntimeException("Error al copiar comprobante: " + e.getMessage());
         }
     }
 

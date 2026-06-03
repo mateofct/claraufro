@@ -34,8 +34,7 @@ public class ControladorUsuario {
     public void registrarUsuario(String idAgrupacion, String nombre, String contrasena, RolUsuario rol, String matricula) {
         for (Usuario u : usuarios) {
             if (u.getMatricula().equals(matricula)) {
-                System.out.println("Error: Matricula ya existe.");
-                return;
+                throw new IllegalArgumentException("Error: Matricula ya existe.");
             }
         }
         String contrasenaCifrada = GestorSeguridad.cifrar(contrasena);
@@ -43,8 +42,6 @@ public class ControladorUsuario {
         usuarios.add(nuevo);
 
         GestorArchivosCSV.guardarUsuario(nuevo);
-
-        System.out.println("Usuario registrado: " + nombre);
     }
 
     public void cerrarSesion() {
