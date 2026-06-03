@@ -2,10 +2,19 @@ package Controlador;
 
 import Modelo.Movimiento;
 import Modelo.TipoMovimiento;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorFinanzas {
-    public void registrarMovimiento(String idAgrupacion, TipoMovimiento tipo, int monto, String descripcion, String rutaComprobante, String idUsuario) {
+
+    private GestorDocumentos gestorDocumentos;
+
+    public ControladorFinanzas(){
+        this.gestorDocumentos = new GestorDocumentos();
+    }
+
+    public void registrarMovimiento(String idAgrupacion, TipoMovimiento tipo, int monto, String descripcion, String rutaOrigen, String idUsuario) {
         if (monto <= 0) {
             System.out.println("Error: El monto debe ser mayor a 0.");
             return;
@@ -19,7 +28,9 @@ public class ControladorFinanzas {
             }
         }
 
-        Movimiento nuevo = new Movimiento(idAgrupacion, tipo, monto, descripcion, rutaComprobante, idUsuario);
+        String nombreComprobanteLocal = gestorDocumentos.guardarComprobanteLocal(rutaOrigen);
+
+        Movimiento nuevo = new Movimiento(idAgrupacion, tipo, monto, descripcion, nombreComprobanteLocal, idUsuario);
 
         GestorArchivosCSV.guardarMovimiento(nuevo);
         System.out.println("Movimiento registrado con éxito.");
@@ -53,5 +64,23 @@ public class ControladorFinanzas {
                 System.out.println("[" + d[4] + "] " + d[2] + " por $" + d[3] + " | " + d[5] + " (Comprobante: " + d[6] + ")");
             }
         }
+    }
+
+    public List<String[]> filtrarMovimientos(String idAgrupacion, String fechaBuscada, String tipoBuscado) {
+        List<String[]> todos = GestorArchivosCSV.leerLineasMovimientos(idAgrupacion);
+        List<String[]> resultado = new ArrayList<>();
+
+        for  (String[] mov : todos) {
+            boolean coincideFecha = (fechaBuscada == null || fechaBuscada.isEmpty() || mov[4].equals(fechaBuscada));
+            boolean coincideTipo = (tipoBuscado == null || tipoBuscado.isEmpty() || mov[2].equalsIgnoreCase(tipoBuscado));
+            if (coincideFecha && coincideTipo) {
+                resultado.add(mov);
+            }
+        }
+        return resultado;
+    }
+
+    public void pedirAbrirComprobante(String nombreArchivo) {
+        gestorDocumentos.abrirComprobante(nombreArchivo);
     }
 }
