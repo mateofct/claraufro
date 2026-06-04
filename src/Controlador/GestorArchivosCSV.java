@@ -87,6 +87,7 @@ public class GestorArchivosCSV {
                 String[] d = linea.split(";");
                 if (d.length >= 6) {
                     Usuario u = new Usuario(d[1], d[2], d[3], RolUsuario.valueOf(d[4]), d[5]);
+                    u.setIdUsuario(d[0]);
                     lista.add(u);
                 }
             }

@@ -147,20 +147,40 @@ public class VentanaRegistrarMovimiento extends JFrame{
     }
 
     private void guardarMovimiento() {
-        String montoTexto   = EscribirMonto.getText().trim();
-        String descripcion  = EscribirDescripcion.getText().trim();
-        int monto = Integer.parseInt(montoTexto);
-        TipoMovimiento tipo;
+        try {
+            String montoTexto   = EscribirMonto.getText().trim();
+            String descripcion  = EscribirDescripcion.getText().trim();
 
-        if (Ingreso) {
-            tipo = TipoMovimiento.INGRESO;
-        } else {
-            tipo = TipoMovimiento.EGRESO;
+            if (montoTexto.isEmpty() || descripcion.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar el monto y la descripción.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int monto = Integer.parseInt(montoTexto);
+            TipoMovimiento tipo;
+
+            if (Ingreso) {
+                tipo = TipoMovimiento.INGRESO;
+            } else {
+                tipo = TipoMovimiento.EGRESO;
+            }
+
+            // CORRECCIÓN LÍNEA 161: Extracción segura de la ruta a String
+            String rutaAbsoluta = (archivoComprobante != null) ? archivoComprobante.getAbsolutePath() : "";
+
+            controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, descripcion, rutaAbsoluta, usuario.getIdUsuario());
+
+            // Si el controlador no interrumpe el flujo, es un éxito real
+            JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente");
+            dispose();
+
+        } catch (NumberFormatException ex) {
+            // Caso límite: el usuario puso letras o símbolos en el monto
+            JOptionPane.showMessageDialog(this, "El monto debe ser un número entero válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException ex) {
+            // Caso límite: Atrapa los fallos de saldo insuficiente o montos negativos de tu Controlador
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error en el registro", JOptionPane.ERROR_MESSAGE);
         }
-
-        controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, descripcion, archivoComprobante, usuario.getIdUsuario());
-        JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente");
-        dispose();
     }
 
 

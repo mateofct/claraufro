@@ -6,18 +6,19 @@ import Controlador.ControladorUsuario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class VentanaRegistrarUsuario extends JFrame{
+public class VentanaRegistrarUsuario extends JFrame {
     private ControladorUsuario controladorUsuario;
     private JTextField EscribirMatricula;
     private JTextField EscribirNombre;
     private JPasswordField EscribirContraseña;
-    private JTextField EscribirNumeroRol;
+
+    private JComboBox<String> selectorRol;
 
     public VentanaRegistrarUsuario(ControladorUsuario controladorUsuario){
         this.controladorUsuario = controladorUsuario;
 
         setTitle("Registrar nuevo usuario");
-        setSize(400, 480);
+        setSize(400, 500);
         setLayout(null);
         setLocationRelativeTo(null);
         getContentPane().setBackground(new Color(102, 133, 183));
@@ -30,45 +31,44 @@ public class VentanaRegistrarUsuario extends JFrame{
 
         JLabel etiquetaMatricula = new JLabel("Matrícula:");
         etiquetaMatricula.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaMatricula.setBounds(20, 80, 340, 20);
+        etiquetaMatricula.setBounds(20, 70, 340, 20);
         add(etiquetaMatricula);
 
         EscribirMatricula = new JTextField();
-        EscribirMatricula.setBounds(20, 102, 340, 35);
+        EscribirMatricula.setBounds(20, 92, 340, 35);
         add(EscribirMatricula);
 
         JLabel etiquetaNombre = new JLabel("Nombre completo:");
         etiquetaNombre.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaNombre.setBounds(20, 148, 340, 20);
+        etiquetaNombre.setBounds(20, 138, 340, 20);
         add(etiquetaNombre);
 
         EscribirNombre = new JTextField();
-        EscribirNombre.setBounds(20, 170, 340, 35);
+        EscribirNombre.setBounds(20, 160, 340, 35);
         add(EscribirNombre);
 
         JLabel etiquetaContraseña = new JLabel("Contraseña:");
         etiquetaContraseña.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaContraseña.setBounds(20, 216, 340, 20);
+        etiquetaContraseña.setBounds(20, 206, 340, 20);
         add(etiquetaContraseña);
 
         EscribirContraseña = new JPasswordField();
-        EscribirContraseña.setBounds(20, 238, 340, 35);
+        EscribirContraseña.setBounds(20, 228, 340, 35);
         add(EscribirContraseña);
 
-        JLabel etiquetaRol = new JLabel("-----Rol del usuario-----\n 1. Tesorero\n 2. Socio \n Escriba el número del Rol");
+        JLabel etiquetaRol = new JLabel("Rol del usuario:");
         etiquetaRol.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaRol.setBounds(20, 352, 200, 20);
+        etiquetaRol.setBounds(20, 274, 200, 20);
         add(etiquetaRol);
 
-        EscribirNumeroRol = new JTextField();
-        EscribirNumeroRol.setBounds(20, 374, 340, 35);
-        add(EscribirNumeroRol);
-
+        selectorRol = new JComboBox<>(new String[]{"Tesorero", "Socio"});
+        selectorRol.setBounds(20, 296, 340, 35);
+        add(selectorRol);
 
         JButton botonGuardar = new JButton("Registrar usuario");
         botonGuardar.setBackground(new Color(30, 100, 200));
         botonGuardar.setForeground(Color.WHITE);
-        botonGuardar.setBounds(20, 415, 160, 38);
+        botonGuardar.setBounds(20, 360, 160, 38);
 
         botonGuardar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -79,7 +79,7 @@ public class VentanaRegistrarUsuario extends JFrame{
 
         JButton botonCancelar = new JButton("Cancelar");
         botonCancelar.setBackground(Color.WHITE);
-        botonCancelar.setBounds(200, 415, 160, 38);
+        botonCancelar.setBounds(200, 360, 160, 38);
 
         botonCancelar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -88,24 +88,29 @@ public class VentanaRegistrarUsuario extends JFrame{
         });
         add(botonCancelar);
         setVisible(true);
-
     }
+
     private void guardarUsuario() {
         String matricula  = EscribirMatricula.getText().trim();
         String nombre     = EscribirNombre.getText().trim();
         String contraseña = new String(EscribirContraseña.getPassword());
-        String numeroRol = EscribirNumeroRol.getText().trim();
-        RolUsuario rol;
-        if (numeroRol.equals("1")) {
-            rol = RolUsuario.TESORERO;
-        } else {
-            rol = RolUsuario.SOCIO;
+
+        // validacion de campos vacios
+        if (matricula.isEmpty() || nombre.isEmpty() || contraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error de validación", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        controladorUsuario.registrarUsuario("agrup-001", nombre, contraseña, rol, matricula);
-        JOptionPane.showMessageDialog(this, "Usuario '" + nombre + "' registrado correctamente");
-        dispose();
+
+        String rolSeleccionado = selectorRol.getSelectedItem().toString();
+        RolUsuario rol = rolSeleccionado.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
+
+        // fallos del controlador (matricula vacia etc)
+        try {
+            controladorUsuario.registrarUsuario("agrup-001", nombre, contraseña, rol, matricula);
+            JOptionPane.showMessageDialog(this, "Usuario '" + nombre + "' registrado correctamente");
+            dispose();
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al registrar", JOptionPane.ERROR_MESSAGE);
+        }
     }
-
-
-
 }
