@@ -2,6 +2,7 @@ package Controlador;
 
 import Modelo.Movimiento;
 import Modelo.TipoMovimiento;
+import Modelo.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,6 @@ public class ControladorFinanzas {
                 }
             } catch (NumberFormatException e) {
                 // si hay letras en el monto se ignora la fila
-                continue;
             }
         }
         return saldoTotal;
@@ -60,6 +60,7 @@ public class ControladorFinanzas {
 
     public List<String[]> filtrarMovimientos(String idAgrupacion, String fechaBuscada, String tipoBuscado) {
         List<String[]> todos = GestorArchivosCSV.leerLineasMovimientos(idAgrupacion);
+        List<Usuario> listaUsuarios = GestorArchivosCSV.cargarUsuarios();
         List<String[]> resultado = new ArrayList<>();
 
         String fechaLimpia = (fechaBuscada != null) ? fechaBuscada.trim() : "";
@@ -73,6 +74,16 @@ public class ControladorFinanzas {
             boolean coincideTipo = (tipoBuscado == null || tipoBuscado.isEmpty() || mov[2].equalsIgnoreCase(tipoBuscado));
 
             if (coincideFecha && coincideTipo) {
+
+                String idUsuarioBuscado = mov[7];
+                String nombreReal = "Desconocido";
+                for (Usuario u : listaUsuarios) {
+                    if (u.getIdUsuario().equals(idUsuarioBuscado)) {
+                        nombreReal = u.getNombre();
+                        break;
+                    }
+                }
+                mov[7] =  nombreReal;
                 resultado.add(mov);
             }
         }
