@@ -178,7 +178,7 @@ public class VentanaRegistrarMovimiento extends JFrame{
             // Caso límite: el usuario puso letras o símbolos en el monto
             JOptionPane.showMessageDialog(this, "El monto debe ser un número entero válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
         } catch (RuntimeException ex) {
-            // Caso límite: Atrapa los fallos de saldo insuficiente o montos negativos de tu Controlador
+            // Caso límite: Atrapa los fallos de saldo insuficiente o montos negativos de tu Main.Controlador
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error en el registro", JOptionPane.ERROR_MESSAGE);
         }
     }
