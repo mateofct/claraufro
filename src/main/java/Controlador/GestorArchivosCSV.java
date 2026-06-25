@@ -16,6 +16,8 @@ import java.util.List;
 public class GestorArchivosCSV {
     private static final String RUTA_MOVIMIENTOS = "data/movimientos_clara.csv";
     private static final String RUTA_USUARIOS = "data/usuarios.csv";
+    private static final String RUTA_AGRUPACIONES = "data/agrupaciones.csv";
+
 
     public static void guardarMovimiento(Movimiento mov) {
         verificarCarpetaData();

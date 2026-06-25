@@ -19,7 +19,6 @@ public class Usuario {
 
 
     public String getIdUsuario() {
-
         return idUsuario;
     }
     public String getIdAgrupacion() {
@@ -50,6 +49,9 @@ public class Usuario {
     }
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
+    }
+    public void setIdAgrupacion(String idAgrupacion) {
+        this.idAgrupacion = idAgrupacion;
     }
 
 

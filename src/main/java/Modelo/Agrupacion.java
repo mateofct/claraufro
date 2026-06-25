@@ -42,24 +42,22 @@ public class Agrupacion {
     public String getIdAgrupacion() {
         return this.idAgrupacion;
     }
-
     public String getNombreAgrupacion() {
         return this.nombreAgrupacion;
     }
-
     public int getSaldoTotal(){
         return this.saldoTotal;
     }
-
     public List<String> getIdMiembros(){
         return this.idMiembros;
     }
-
     public void setNombreAgrupacion(String nombreAgrupacion){
         this.nombreAgrupacion = nombreAgrupacion;
     }
-
     public void setSaldoTotal(int saldoTotal) {
         this.saldoTotal = saldoTotal;
+    }
+    public void setIdAgrupacion(String idAgrupacion) {
+        this.idAgrupacion = idAgrupacion;
     }
 }
