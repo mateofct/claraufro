@@ -49,7 +49,6 @@ public class GestorMatriculas implements IFuenteMatriculas {
         } catch (IOException e) {
             throw new RuntimeException("Error al leer la base de matrículas: " + e.getMessage());
         }
-
         throw new IllegalArgumentException("La matrícula ingresada no existe en el registro de la universidad.");
     }
 }

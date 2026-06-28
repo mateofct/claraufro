@@ -1,8 +1,10 @@
 package Vista;
-import javax.swing.*;
-import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +12,7 @@ public class VentanaMenuTesorero extends JFrame{
 
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
+    private ControladorAgrupacion controladorAgrupacion;
 
     public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         this.controladorUsuario = controladorUsuario;
@@ -114,13 +117,10 @@ public class VentanaMenuTesorero extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 controladorUsuario.cerrarSesion();
                 dispose();
-                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas);
+                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
             }
         });
         add(botonCerrarSesion);
         setVisible(true);
-
-
-
     }
 }

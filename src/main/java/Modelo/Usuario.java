@@ -56,5 +56,8 @@ public class Usuario {
         this.idAgrupacion = idAgrupacion;
     }
 
-
+    @Override
+    public String toString() {
+        return this.nombre + " (" + this.matricula + ")";
+    }
 }

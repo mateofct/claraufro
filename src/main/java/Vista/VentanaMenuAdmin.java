@@ -1,6 +1,8 @@
 package Vista;
 import javax.swing.*;
 import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
 import java.awt.event.ActionEvent;
@@ -9,14 +11,16 @@ import java.awt.event.ActionListener;
 public class VentanaMenuAdmin extends JFrame{
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
+    private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaMenuAdmin(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    public VentanaMenuAdmin(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
         this.controladorUsuario = controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
+        this.controladorAgrupacion = controladorAgrupacion;
         String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
 
         setTitle("CLARA - Menú Administrador");
-        setSize(400, 450);
+        setSize(400, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);
@@ -92,6 +96,7 @@ public class VentanaMenuAdmin extends JFrame{
         });
         add(botonHistorial);
 
+
         JButton botonCerrarSesion = new JButton("Cerrar sesión");
         botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
         botonCerrarSesion.setBackground(new Color(220, 50, 50));
@@ -103,7 +108,7 @@ public class VentanaMenuAdmin extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 controladorUsuario.cerrarSesion();
                 dispose();
-                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas);
+                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
             }
         });
         add(botonCerrarSesion);

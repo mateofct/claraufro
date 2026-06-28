@@ -2,7 +2,10 @@ package Controlador;
 
 import Modelo.Usuario;
 import Modelo.RolUsuario;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class ControladorUsuario {
     private List<Usuario> usuarios;
@@ -55,6 +58,20 @@ public class ControladorUsuario {
 
         GestorArchivosCSV.guardarUsuario(nuevo);
         return nuevo;
+    }
+
+    public List<Usuario> listarUsuarios() {
+        return Collections.unmodifiableList(usuarios);
+    }
+
+    public List<Usuario> listarUsuariosPorAgrupacion(String idAgrupacion) {
+        List<Usuario> resultado = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getIdAgrupacion().equals(idAgrupacion)) {
+                resultado.add(usuario);
+            }
+        }
+        return resultado;
     }
 
     public void cerrarSesion() {

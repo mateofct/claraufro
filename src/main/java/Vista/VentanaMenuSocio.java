@@ -1,6 +1,8 @@
 package Vista;
 import javax.swing.*;
 import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
 import java.awt.event.ActionEvent;
@@ -9,10 +11,13 @@ import java.awt.event.ActionListener;
 public class VentanaMenuSocio extends JFrame {
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
-    public VentanaMenuSocio(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas){
+    private  ControladorAgrupacion controladorAgrupacion;
+
+    public VentanaMenuSocio(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
         String nombreUsuario= controladorUsuario.getUsuarioActivo().getNombre();
         this.controladorUsuario= controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
+        this.controladorAgrupacion = controladorAgrupacion;
 
         setTitle("CLARA - Menu Socio");
         setSize(400, 380);
@@ -79,7 +84,7 @@ public class VentanaMenuSocio extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 controladorUsuario.cerrarSesion();
                 dispose();
-                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas);
+                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
             }
         });
         add(botonCerrarSesion);

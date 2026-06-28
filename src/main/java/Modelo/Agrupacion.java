@@ -60,4 +60,9 @@ public class Agrupacion {
     public void setIdAgrupacion(String idAgrupacion) {
         this.idAgrupacion = idAgrupacion;
     }
+
+    @Override
+    public String toString() {
+        return this.nombreAgrupacion;
+    }
 }

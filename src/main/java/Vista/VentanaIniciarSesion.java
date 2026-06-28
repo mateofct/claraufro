@@ -2,6 +2,8 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
 import Modelo.RolUsuario;
@@ -14,10 +16,13 @@ public class VentanaIniciarSesion extends JFrame {
     private JPasswordField EscribirContraseña;
     private ControladorFinanzas controladorFinanzas;
     private ControladorUsuario controladorUsuario;
+    private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
         this.controladorFinanzas = controladorFinanzas;
         this.controladorUsuario = controladorUsuario;
+        this.controladorAgrupacion = controladorAgrupacion;
+
         setTitle("Iniciar Sesión - CLARA");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,14 +93,13 @@ public class VentanaIniciarSesion extends JFrame {
             RolUsuario rol = controladorUsuario.getUsuarioActivo().getRol();
 
             if(rol==RolUsuario.ADMIN){
-                new VentanaMenuAdmin(controladorUsuario,controladorFinanzas);
+                new VentanaMenuAdmin(controladorUsuario,controladorFinanzas, controladorAgrupacion);
                 
             } else if (rol==RolUsuario.TESORERO) {
                 new VentanaMenuTesorero(controladorUsuario,controladorFinanzas);
                 
             } else if (rol==RolUsuario.SOCIO) {
                 new VentanaMenuSocio(controladorUsuario,controladorFinanzas);
-                
             }
         }
     }
