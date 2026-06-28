@@ -85,7 +85,7 @@ public class VentanaMenuAdmin extends JFrame{
         JButton botonHistorial = new JButton("Ver historial de movimientos");
         botonHistorial.setFont(new Font("Arial", Font.PLAIN, 14));
         botonHistorial.setBackground(Color.WHITE);
-        botonHistorial.setBounds(20, 258, 350, 45);
+        botonHistorial.setBounds(20, 250, 350, 45);
         botonHistorial.setFocusPainted(false);
         botonHistorial.setHorizontalAlignment(JButton.LEFT);
 
@@ -96,14 +96,29 @@ public class VentanaMenuAdmin extends JFrame{
         });
         add(botonHistorial);
 
+        JButton botonCrearAgrupacion = new JButton("Crear nueva agrupación");
+        botonCrearAgrupacion.setFont(new Font("Arial", Font.PLAIN, 14));
+        botonCrearAgrupacion.setBackground(Color.WHITE);
+        botonCrearAgrupacion.setBounds(20, 300, 350, 45);
+        botonCrearAgrupacion.setHorizontalAlignment(JButton.LEFT);
+        botonCrearAgrupacion.addActionListener(e -> new VentanaCrearAgrupacion(controladorAgrupacion));
+        add(botonCrearAgrupacion);
+
+        JButton botonGestionarMiembros = new JButton("Gestionar miembros de agrupación");
+        botonGestionarMiembros.setFont(new Font("Arial", Font.PLAIN, 14));
+        botonGestionarMiembros.setBackground(Color.WHITE);
+        botonGestionarMiembros.setBounds(20, 350, 350, 45);
+        botonGestionarMiembros.setHorizontalAlignment(JButton.LEFT);
+        botonGestionarMiembros.addActionListener(e -> new VentanaGestionarMiembros(controladorAgrupacion, controladorUsuario));
+        add(botonGestionarMiembros);
+
 
         JButton botonCerrarSesion = new JButton("Cerrar sesión");
         botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
         botonCerrarSesion.setBackground(new Color(220, 50, 50));
         botonCerrarSesion.setForeground(Color.WHITE);
-        botonCerrarSesion.setBounds(20, 360, 350, 45);
+        botonCerrarSesion.setBounds(20, 560, 350, 45);
         botonCerrarSesion.setFocusPainted(false);
-
         botonCerrarSesion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 controladorUsuario.cerrarSesion();

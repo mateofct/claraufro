@@ -1,4 +1,5 @@
 package Modelo;
+
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ public class Agrupacion {
     private int saldoTotal;
     private List<String> idMiembros;
 
-    public Agrupacion(String nombreAgrupacion ){
+    public Agrupacion(String nombreAgrupacion) {
         this.idAgrupacion = UUID.randomUUID().toString();
         this.nombreAgrupacion = nombreAgrupacion;
         this.saldoTotal = 0;
@@ -21,7 +22,7 @@ public class Agrupacion {
         for (String recorrerID : this.idMiembros) {
             if (recorrerID.equals(idUsuario)) {
                 miembroExiste = false;
-                System.out.println("El usuario ya es miembro de la agrupación");
+                System.out.println("El usuario ya es miembro de la agrupación"); // CAMBIAR A VISTA
                 break;
             }
         }

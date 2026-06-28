@@ -40,9 +40,6 @@ public class Usuario {
     }
 
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }

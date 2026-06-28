@@ -9,14 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaMenuTesorero extends JFrame{
-
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
     private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
         this.controladorUsuario = controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
+        this.controladorAgrupacion = controladorAgrupacion;
         String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
 
         setTitle("CLARA - Menu Tesorero");

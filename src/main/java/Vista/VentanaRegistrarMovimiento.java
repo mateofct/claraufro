@@ -31,7 +31,7 @@ public class VentanaRegistrarMovimiento extends JFrame{
         setSize(400, 380);
         setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(240, 240, 240));
+        getContentPane().setBackground(new Color(102, 133, 183, 255));
 
         Color colorTipo;
         if (Ingreso) {

@@ -11,11 +11,11 @@ import java.awt.event.ActionListener;
 public class VentanaMenuSocio extends JFrame {
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
-    private  ControladorAgrupacion controladorAgrupacion;
+    private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaMenuSocio(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
-        String nombreUsuario= controladorUsuario.getUsuarioActivo().getNombre();
-        this.controladorUsuario= controladorUsuario;
+    public VentanaMenuSocio(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
+        String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
+        this.controladorUsuario = controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
         this.controladorAgrupacion = controladorAgrupacion;
 
@@ -91,6 +91,4 @@ public class VentanaMenuSocio extends JFrame {
         setVisible(true);
 
     }
-
-
 }

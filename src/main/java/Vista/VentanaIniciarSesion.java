@@ -93,13 +93,13 @@ public class VentanaIniciarSesion extends JFrame {
             RolUsuario rol = controladorUsuario.getUsuarioActivo().getRol();
 
             if(rol==RolUsuario.ADMIN){
-                new VentanaMenuAdmin(controladorUsuario,controladorFinanzas, controladorAgrupacion);
+                new VentanaMenuAdmin(controladorUsuario, controladorFinanzas, controladorAgrupacion);
                 
             } else if (rol==RolUsuario.TESORERO) {
-                new VentanaMenuTesorero(controladorUsuario,controladorFinanzas);
+                new VentanaMenuTesorero(controladorUsuario, controladorFinanzas, controladorAgrupacion);
                 
             } else if (rol==RolUsuario.SOCIO) {
-                new VentanaMenuSocio(controladorUsuario,controladorFinanzas);
+                new VentanaMenuSocio(controladorUsuario, controladorFinanzas, controladorAgrupacion);
             }
         }
     }
