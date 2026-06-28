@@ -42,7 +42,7 @@ public class VentanaMenuAdmin extends JFrame{
 
         JLabel seccionUsuarios = new JLabel("USUARIOS");
         seccionUsuarios.setFont(new Font("Arial", Font.BOLD, 11));
-        seccionUsuarios.setForeground(Color.GRAY);
+        seccionUsuarios.setForeground(Color.BLACK);
         seccionUsuarios.setBounds(20, 105, 200, 20);
         add(seccionUsuarios);
 
@@ -61,7 +61,7 @@ public class VentanaMenuAdmin extends JFrame{
 
         JLabel seccionConsultas = new JLabel("CONSULTAS");
         seccionConsultas.setFont(new Font("Arial", Font.BOLD, 11));
-        seccionConsultas.setForeground(Color.GRAY);
+        seccionConsultas.setForeground(Color.BLACK);
         seccionConsultas.setBounds(20, 188, 200, 20);
         add(seccionConsultas);
 
@@ -109,8 +109,4 @@ public class VentanaMenuAdmin extends JFrame{
         add(botonCerrarSesion);
         setVisible(true);
     }
-
-
-
-
 }

@@ -1,5 +1,7 @@
 package Modelo;
+
 import java.util.UUID;
+
 public class Usuario {
     private String idUsuario;
     private String idAgrupacion;

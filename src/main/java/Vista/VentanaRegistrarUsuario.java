@@ -3,13 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import Modelo.RolUsuario;
 import Controlador.ControladorUsuario;
+import Modelo.Usuario;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaRegistrarUsuario extends JFrame {
     private ControladorUsuario controladorUsuario;
     private JTextField EscribirMatricula;
-    private JTextField EscribirNombre;
     private JPasswordField EscribirContraseña;
 
     private JComboBox<String> selectorRol;
@@ -38,22 +39,13 @@ public class VentanaRegistrarUsuario extends JFrame {
         EscribirMatricula.setBounds(20, 92, 340, 35);
         add(EscribirMatricula);
 
-        JLabel etiquetaNombre = new JLabel("Nombre completo:");
-        etiquetaNombre.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaNombre.setBounds(20, 138, 340, 20);
-        add(etiquetaNombre);
-
-        EscribirNombre = new JTextField();
-        EscribirNombre.setBounds(20, 160, 340, 35);
-        add(EscribirNombre);
-
         JLabel etiquetaContraseña = new JLabel("Contraseña:");
         etiquetaContraseña.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaContraseña.setBounds(20, 206, 340, 20);
+        etiquetaContraseña.setBounds(20, 170, 340, 20);
         add(etiquetaContraseña);
 
         EscribirContraseña = new JPasswordField();
-        EscribirContraseña.setBounds(20, 228, 340, 35);
+        EscribirContraseña.setBounds(20, 190, 340, 35);
         add(EscribirContraseña);
 
         JLabel etiquetaRol = new JLabel("Rol del usuario:");
@@ -92,11 +84,9 @@ public class VentanaRegistrarUsuario extends JFrame {
 
     private void guardarUsuario() {
         String matricula  = EscribirMatricula.getText().trim();
-        String nombre     = EscribirNombre.getText().trim();
         String contraseña = new String(EscribirContraseña.getPassword());
 
-        // validacion de campos vacios
-        if (matricula.isEmpty() || nombre.isEmpty() || contraseña.isEmpty()) {
+        if (matricula.isEmpty() || contraseña.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error de validación", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -104,13 +94,12 @@ public class VentanaRegistrarUsuario extends JFrame {
         String rolSeleccionado = selectorRol.getSelectedItem().toString();
         RolUsuario rol = rolSeleccionado.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
 
-        // fallos del controlador (matricula vacia etc)
         try {
-            controladorUsuario.registrarUsuario("agrup-001", nombre, contraseña, rol, matricula);
-            JOptionPane.showMessageDialog(this, "Usuario '" + nombre + "' registrado correctamente");
+            Usuario creado = controladorUsuario.registrarUsuario("agrup-001", rol, contraseña, matricula);
+            JOptionPane.showMessageDialog(this, "Usuario '" + creado.getNombre() + "' registrado correctamente");
             dispose();
-        } catch (RuntimeException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al registrar", JOptionPane.ERROR_MESSAGE);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error al registrar", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

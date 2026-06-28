@@ -8,7 +8,6 @@ import Modelo.RolUsuario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 public class VentanaIniciarSesion extends JFrame {
 
     private JTextField EscribirMatricula;
@@ -33,9 +32,8 @@ public class VentanaIniciarSesion extends JFrame {
         add(titulo);
 
         JLabel subtitulo = new JLabel("Iniciar Sesión");
-        subtitulo.setFont(new Font("Arial", Font.PLAIN, 13));
-        subtitulo.setForeground(Color.GRAY);
-        subtitulo.setBounds(90, 60, 250, 20);
+        subtitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        subtitulo.setBounds(60, 80, 250, 20);
         add(subtitulo);
 
         JLabel etiquetaMatricula = new JLabel("Matrícula:");
@@ -71,8 +69,6 @@ public class VentanaIniciarSesion extends JFrame {
         });
         add(botonIngresar);
         setVisible(true);
-
-
     }
 
     private void intentarLogin() {
@@ -103,8 +99,6 @@ public class VentanaIniciarSesion extends JFrame {
             }
         }
     }
-
-
 }
 
 
