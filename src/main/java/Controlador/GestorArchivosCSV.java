@@ -28,7 +28,6 @@ public class GestorArchivosCSV {
                 mov.getDescripcionMovimiento() + ";" +
                 mov.getRutaComprobante() + ";" +
                 mov.getIdUsuarioQueRegistra() + System.lineSeparator();
-
         try {
             Files.writeString(Paths.get(RUTA_MOVIMIENTOS), linea, StandardOpenOption.CREATE, StandardOpenOption.APPEND, StandardOpenOption.SYNC);
         } catch (IOException e) {
@@ -191,5 +190,4 @@ public class GestorArchivosCSV {
             directorio.mkdirs();
         }
     }
-
 }

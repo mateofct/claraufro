@@ -1,9 +1,10 @@
 package Vista;
+
 import javax.swing.*;
 import java.awt.*;
 import Modelo.RolUsuario;
-import Controlador.ControladorUsuario;
 import Modelo.Usuario;
+import Controlador.ControladorUsuario;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

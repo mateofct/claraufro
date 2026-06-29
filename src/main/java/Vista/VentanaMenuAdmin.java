@@ -53,65 +53,62 @@ public class VentanaMenuAdmin extends JFrame{
         JButton botonRegistrarUsuario = new JButton("Registrar nuevo usuario");
         botonRegistrarUsuario.setFont(new Font("Arial", Font.PLAIN, 14));
         botonRegistrarUsuario.setBackground(Color.WHITE);
-        botonRegistrarUsuario.setBounds(20, 128, 350, 45);
-        botonRegistrarUsuario.setHorizontalAlignment(JButton.LEFT);
-
-        botonRegistrarUsuario.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaRegistrarUsuario(controladorUsuario);
-            }
-        });
+        botonRegistrarUsuario.setBounds(20, 125, 350, 45);
+        botonRegistrarUsuario.setHorizontalAlignment(JButton.CENTER);
+        botonRegistrarUsuario.addActionListener(e -> new VentanaRegistrarUsuario(controladorUsuario));
         add(botonRegistrarUsuario);
 
-        JLabel seccionConsultas = new JLabel("CONSULTAS");
-        seccionConsultas.setFont(new Font("Arial", Font.BOLD, 11));
-        seccionConsultas.setForeground(Color.BLACK);
-        seccionConsultas.setBounds(20, 188, 200, 20);
-        add(seccionConsultas);
+        JButton botonGestionarUsuario = new JButton("Gestionar Usuarios");
+        botonGestionarUsuario.setFont(new Font("Arial", Font.PLAIN, 14));
+        botonGestionarUsuario.setBackground(Color.WHITE);
+        botonGestionarUsuario.setBounds(20, 175, 350, 45);
+        botonGestionarUsuario.setHorizontalAlignment(JButton.CENTER);
+        botonRegistrarUsuario.addActionListener(e -> new VentanaGestionarUsuario(controladorUsuario));
+        add(botonGestionarUsuario);
 
-        JButton botonVerSaldo = new JButton("Ver saldo de la agrupación");
-        botonVerSaldo.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonVerSaldo.setBackground(Color.WHITE);
-        botonVerSaldo.setBounds(20, 210, 350, 45);
-        botonVerSaldo.setHorizontalAlignment(JButton.LEFT);
-
-        botonVerSaldo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo());
-            }
-        });
-        add(botonVerSaldo);
-
-        JButton botonHistorial = new JButton("Ver historial de movimientos");
-        botonHistorial.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonHistorial.setBackground(Color.WHITE);
-        botonHistorial.setBounds(20, 250, 350, 45);
-        botonHistorial.setFocusPainted(false);
-        botonHistorial.setHorizontalAlignment(JButton.LEFT);
-
-        botonHistorial.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo());
-            }
-        });
-        add(botonHistorial);
+        JLabel seccionAgrupaciones = new JLabel("AGRUPACIONES");
+        seccionAgrupaciones.setFont(new Font("Arial", Font.BOLD, 11));
+        seccionAgrupaciones.setForeground(Color.BLACK);
+        seccionAgrupaciones.setBounds(20, 250, 200, 20);
+        add(seccionAgrupaciones);
 
         JButton botonCrearAgrupacion = new JButton("Crear nueva agrupación");
         botonCrearAgrupacion.setFont(new Font("Arial", Font.PLAIN, 14));
         botonCrearAgrupacion.setBackground(Color.WHITE);
-        botonCrearAgrupacion.setBounds(20, 300, 350, 45);
-        botonCrearAgrupacion.setHorizontalAlignment(JButton.LEFT);
+        botonCrearAgrupacion.setBounds(20, 270, 350, 45);
+        botonCrearAgrupacion.setHorizontalAlignment(JButton.CENTER);
         botonCrearAgrupacion.addActionListener(e -> new VentanaCrearAgrupacion(controladorAgrupacion));
         add(botonCrearAgrupacion);
 
         JButton botonGestionarMiembros = new JButton("Gestionar miembros de agrupación");
         botonGestionarMiembros.setFont(new Font("Arial", Font.PLAIN, 14));
         botonGestionarMiembros.setBackground(Color.WHITE);
-        botonGestionarMiembros.setBounds(20, 350, 350, 45);
-        botonGestionarMiembros.setHorizontalAlignment(JButton.LEFT);
+        botonGestionarMiembros.setBounds(20, 320, 350, 45);
+        botonGestionarMiembros.setHorizontalAlignment(JButton.CENTER);
         botonGestionarMiembros.addActionListener(e -> new VentanaGestionarMiembros(controladorAgrupacion, controladorUsuario));
         add(botonGestionarMiembros);
 
+        JButton botonGestionarAgrupacion = new JButton("Gestionar agrupación");
+        botonGestionarAgrupacion.setFont(new Font("Arial", Font.PLAIN, 14));
+        botonGestionarAgrupacion.setBackground(Color.WHITE);
+        botonGestionarAgrupacion.setBounds(20, 370, 350, 45);
+        botonGestionarAgrupacion.setHorizontalAlignment(JButton.CENTER);
+        botonGestionarAgrupacion.addActionListener(e -> new VentanaGestionarAgrupacion(controladorAgrupacion));
+        add(botonGestionarAgrupacion);
+
+        JLabel seccionPersonal = new JLabel("PERSONAL");
+        seccionPersonal.setFont(new Font("Arial", Font.BOLD, 11));
+        seccionPersonal.setForeground(Color.BLACK);
+        seccionPersonal.setBounds(20, 440, 200, 20);
+        add(seccionPersonal);
+
+        JButton botonCambiarContrasena = new JButton("Cambiar contraseña");
+        botonCambiarContrasena.setFont(new Font("Arial", Font.PLAIN, 14));
+        botonCambiarContrasena.setBackground(Color.WHITE);
+        botonCambiarContrasena.setBounds(20, 460, 350, 45);
+        botonCambiarContrasena.setHorizontalAlignment(JButton.CENTER);
+        botonCambiarContrasena.addActionListener(e -> new VentanaCambiarContrasena(controladorUsuario));
+        add(botonCambiarContrasena);
 
         JButton botonCerrarSesion = new JButton("Cerrar sesión");
         botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));

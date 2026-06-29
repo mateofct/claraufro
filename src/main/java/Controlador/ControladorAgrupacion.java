@@ -18,7 +18,7 @@ public class ControladorAgrupacion {
         this.controladorUsuario = controladorUsuario;
 
         if (this.agrupaciones.isEmpty()) {
-            Agrupacion principal = new Agrupacion("Agrupación Principal");
+            Agrupacion principal = new Agrupacion("Sin Agrupación");
             principal.setIdAgrupacion(ID_AGRUPACION_PRINCIPAL);
             this.agrupaciones.add(principal);
             GestorArchivosCSV.guardarAgrupacion(principal);
