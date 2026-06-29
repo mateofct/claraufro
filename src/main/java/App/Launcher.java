@@ -12,7 +12,7 @@ public class Launcher {
         IFuenteMatriculas fuenteMatriculas = new GestorMatriculas();
         ControladorUsuario controladorUsuario   = new ControladorUsuario(fuenteMatriculas); // Para poder cambiarlo si se puede, a google sheets
         ControladorFinanzas controladorFinanzas = new ControladorFinanzas();
-        ControladorAgrupacion controladorAgrupacion = new ControladorAgrupacion();
+        ControladorAgrupacion controladorAgrupacion = new ControladorAgrupacion(controladorUsuario);
         new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
     }
 }

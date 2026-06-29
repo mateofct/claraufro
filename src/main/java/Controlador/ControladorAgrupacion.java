@@ -11,9 +11,11 @@ public class ControladorAgrupacion {
     private static final String ID_AGRUPACION_PRINCIPAL = "agrup-001";
 
     private List<Agrupacion> agrupaciones;
+    private ControladorUsuario controladorUsuario;
 
-    public ControladorAgrupacion() {
+    public ControladorAgrupacion(ControladorUsuario controladorUsuario) {
         this.agrupaciones = GestorArchivosCSV.cargarAgrupaciones();
+        this.controladorUsuario = controladorUsuario;
 
         if (this.agrupaciones.isEmpty()) {
             Agrupacion principal = new Agrupacion("Agrupación Principal");
@@ -52,7 +54,7 @@ public class ControladorAgrupacion {
         }
 
         agrupacion.agregarMiembro(usuario.getIdUsuario());
-        usuario.setIdAgrupacion(idAgrupacion);
+        controladorUsuario.actualizarAgrupacionDeUsuario(usuario, idAgrupacion);
 
         GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
     }
@@ -64,7 +66,7 @@ public class ControladorAgrupacion {
         }
 
         agrupacion.quitarMiembro(usuario.getIdUsuario());
-        usuario.setIdAgrupacion(ID_AGRUPACION_PRINCIPAL);
+        controladorUsuario.actualizarAgrupacionDeUsuario(usuario, ID_AGRUPACION_PRINCIPAL);
 
         GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
     }

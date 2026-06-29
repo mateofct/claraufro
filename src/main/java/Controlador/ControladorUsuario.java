@@ -126,6 +126,11 @@ public class ControladorUsuario {
         return null;
     }
 
+    public void actualizarAgrupacionDeUsuario(Usuario usuario, String nuevaIdAgrupacion) {
+        usuario.setIdAgrupacion(nuevaIdAgrupacion);
+        GestorArchivosCSV.guardarTodosUsuarios(usuarios);
+    }
+
     public void cerrarSesion() {
         this.usuarioActivo = null;
     }
