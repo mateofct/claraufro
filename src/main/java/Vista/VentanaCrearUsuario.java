@@ -6,17 +6,14 @@ import Modelo.RolUsuario;
 import Modelo.Usuario;
 import Controlador.ControladorUsuario;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class VentanaRegistrarUsuario extends JFrame {
+public class VentanaCrearUsuario extends JFrame {
     private ControladorUsuario controladorUsuario;
     private JTextField EscribirMatricula;
     private JPasswordField EscribirContraseña;
 
     private JComboBox<String> selectorRol;
 
-    public VentanaRegistrarUsuario(ControladorUsuario controladorUsuario){
+    public VentanaCrearUsuario(ControladorUsuario controladorUsuario){
         this.controladorUsuario = controladorUsuario;
 
         setTitle("Registrar nuevo usuario");
@@ -31,54 +28,33 @@ public class VentanaRegistrarUsuario extends JFrame {
         titulo.setBounds(20, 15, 340, 30);
         add(titulo);
 
-        JLabel etiquetaMatricula = new JLabel("Matrícula:");
-        etiquetaMatricula.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaMatricula.setBounds(20, 70, 340, 20);
+        JLabel etiquetaMatricula = ComponentesUI.crearEtiqueta("Matrícula:");
         add(etiquetaMatricula);
 
         EscribirMatricula = new JTextField();
         EscribirMatricula.setBounds(20, 92, 340, 35);
         add(EscribirMatricula);
 
-        JLabel etiquetaContraseña = new JLabel("Contraseña:");
-        etiquetaContraseña.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaContraseña.setBounds(20, 170, 340, 20);
+        JLabel etiquetaContraseña = ComponentesUI.crearEtiqueta("Contraseña:");
         add(etiquetaContraseña);
 
         EscribirContraseña = new JPasswordField();
         EscribirContraseña.setBounds(20, 190, 340, 35);
         add(EscribirContraseña);
 
-        JLabel etiquetaRol = new JLabel("Rol del usuario:");
-        etiquetaRol.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaRol.setBounds(20, 274, 200, 20);
+        JLabel etiquetaRol = ComponentesUI.crearEtiqueta("Rol del usuario:");
         add(etiquetaRol);
 
         selectorRol = new JComboBox<>(new String[]{"Tesorero", "Socio"});
         selectorRol.setBounds(20, 296, 340, 35);
         add(selectorRol);
 
-        JButton botonGuardar = new JButton("Registrar usuario");
-        botonGuardar.setBackground(new Color(30, 100, 200));
-        botonGuardar.setForeground(Color.WHITE);
-        botonGuardar.setBounds(20, 360, 160, 38);
-
-        botonGuardar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                guardarUsuario();
-            }
-        });
+        JButton botonGuardar = ComponentesUI.crearBoton("Registrar usuario",
+                e -> guardarUsuario());
         add(botonGuardar);
 
-        JButton botonCancelar = new JButton("Cancelar");
-        botonCancelar.setBackground(Color.WHITE);
-        botonCancelar.setBounds(200, 360, 160, 38);
-
-        botonCancelar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        JButton botonCancelar = ComponentesUI.crearBoton("Cancelar",
+                e -> dispose());
         add(botonCancelar);
         setVisible(true);
     }

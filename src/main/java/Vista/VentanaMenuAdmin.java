@@ -55,7 +55,7 @@ public class VentanaMenuAdmin extends JFrame{
         botonRegistrarUsuario.setBackground(Color.WHITE);
         botonRegistrarUsuario.setBounds(20, 125, 350, 45);
         botonRegistrarUsuario.setHorizontalAlignment(JButton.CENTER);
-        botonRegistrarUsuario.addActionListener(e -> new VentanaRegistrarUsuario(controladorUsuario));
+        botonRegistrarUsuario.addActionListener(e -> new VentanaCrearUsuario(controladorUsuario));
         add(botonRegistrarUsuario);
 
         JButton botonGestionarUsuario = new JButton("Gestionar Usuarios");
@@ -63,7 +63,7 @@ public class VentanaMenuAdmin extends JFrame{
         botonGestionarUsuario.setBackground(Color.WHITE);
         botonGestionarUsuario.setBounds(20, 175, 350, 45);
         botonGestionarUsuario.setHorizontalAlignment(JButton.CENTER);
-        botonRegistrarUsuario.addActionListener(e -> new VentanaGestionarUsuario(controladorUsuario));
+        botonGestionarUsuario.addActionListener(e -> new VentanaGestionarUsuario(controladorUsuario));
         add(botonGestionarUsuario);
 
         JLabel seccionAgrupaciones = new JLabel("AGRUPACIONES");

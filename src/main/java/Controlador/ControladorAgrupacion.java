@@ -80,6 +80,45 @@ public class ControladorAgrupacion {
         return null;
     }
 
+    public void editarAgrupacion(String idAgrupacion, String nuevoNombre) {
+        Agrupacion agrupacion = buscarPorId(idAgrupacion);
+        if (agrupacion == null) {
+            throw new IllegalArgumentException("No existe una agrupación con ese id.");
+        }
+        if (nuevoNombre == null || nuevoNombre.isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la agrupación no puede estar vacío.");
+        }
+        if (nuevoNombre.length() > MAX_LARGO_NOMBRE_AGRUPACION) {
+            throw new IllegalArgumentException("El nombre de la agrupación no puede superar los " + MAX_LARGO_NOMBRE_AGRUPACION + " caracteres.");
+        }
+        for (Agrupacion a : agrupaciones) {
+            if (!a.getIdAgrupacion().equals(idAgrupacion) && a.getNombreAgrupacion().equalsIgnoreCase(nuevoNombre)) {
+                throw new IllegalArgumentException("Ya existe otra agrupación con ese nombre.");
+            }
+        }
+        agrupacion.setNombreAgrupacion(nuevoNombre);
+        GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
+    }
+
+    public void eliminarAgrupacion(String idAgrupacion) {
+        if (idAgrupacion.equals(ID_AGRUPACION_PRINCIPAL)) {
+            throw new IllegalStateException("No se puede eliminar la agrupación principal 'Sin Agrupación'.");
+        }
+
+        Agrupacion agrupacionAEliminar = buscarPorId(idAgrupacion);
+        if (agrupacionAEliminar == null) {
+            throw new IllegalArgumentException("La agrupación a eliminar no existe.");
+        }
+
+        List<Usuario> miembros = controladorUsuario.listarUsuariosPorAgrupacion(idAgrupacion);
+        for (Usuario miembro : miembros) {
+            controladorUsuario.actualizarAgrupacionDeUsuario(miembro, ID_AGRUPACION_PRINCIPAL);
+        }
+
+        agrupaciones.remove(agrupacionAEliminar);
+        GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
+    }
+
     public List<Agrupacion> listarAgrupaciones() {
         return agrupaciones;
     }

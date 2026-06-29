@@ -126,6 +126,18 @@ public class ControladorUsuario {
         return null;
     }
 
+    public void eliminarUsuario(String idUsuario) {
+        Usuario usuarioSeleccionado = buscarUsuarioPorId(idUsuario);
+        if (usuarioSeleccionado == null) {
+            throw new IllegalArgumentException("No existe un usuario con ese id.");
+        }
+        if (usuarioSeleccionado.getRol() == RolUsuario.ADMIN) {
+            throw new IllegalStateException("No se puede eliminar al Administrador.");
+        }
+        usuarios.remove(usuarioSeleccionado);
+        GestorArchivosCSV.guardarTodosUsuarios(usuarios);
+    }
+
     public void actualizarAgrupacionDeUsuario(Usuario usuario, String nuevaIdAgrupacion) {
         usuario.setIdAgrupacion(nuevaIdAgrupacion);
         GestorArchivosCSV.guardarTodosUsuarios(usuarios);
