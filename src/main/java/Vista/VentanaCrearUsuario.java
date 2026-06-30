@@ -10,52 +10,61 @@ public class VentanaCrearUsuario extends JFrame {
     private ControladorUsuario controladorUsuario;
     private JTextField EscribirMatricula;
     private JPasswordField EscribirContraseña;
-
-    private JComboBox<String> selectorRol;
+    private JComboBox<String> seleccionarRol;
 
     public VentanaCrearUsuario(ControladorUsuario controladorUsuario){
         this.controladorUsuario = controladorUsuario;
 
-        setTitle("Registrar nuevo usuario");
+        setTitle("CLARA - Registrar nuevo usuario");
         setSize(400, 500);
-        setLayout(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(102, 133, 183));
 
-        JLabel titulo = new JLabel("Registrar nuevo usuario");
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        titulo.setForeground(new Color(30, 100, 200));
-        titulo.setBounds(20, 15, 340, 30);
-        add(titulo);
+        setLayout(new BorderLayout());
+        ComponentesUI.configurarFondo(this);
 
-        JLabel etiquetaMatricula = ComponentesUI.crearEtiqueta("Matrícula:");
-        add(etiquetaMatricula);
+        JPanel panelSuperior = ComponentesUI.crearPanel();
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+        panelSuperior.add(ComponentesUI.crearTitulo("Registro de Usuario"));
+        add(panelSuperior, BorderLayout.NORTH);
 
-        EscribirMatricula = new JTextField();
-        EscribirMatricula.setBounds(20, 92, 340, 35);
-        add(EscribirMatricula);
+        JPanel panelCentral = ComponentesUI.crearPanel();
+        panelCentral.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(8, 40, 8, 40);
 
-        JLabel etiquetaContraseña = ComponentesUI.crearEtiqueta("Contraseña:");
-        add(etiquetaContraseña);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Matrícula:"), gbc);
+        EscribirMatricula = ComponentesUI.crearCampoTexto();
+        panelCentral.add(EscribirMatricula, gbc);
 
-        EscribirContraseña = new JPasswordField();
-        EscribirContraseña.setBounds(20, 190, 340, 35);
-        add(EscribirContraseña);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Contraseña:"), gbc);
+        EscribirContraseña = ComponentesUI.crearCampoContrasena();
+        panelCentral.add(EscribirContraseña, gbc);
 
-        JLabel etiquetaRol = ComponentesUI.crearEtiqueta("Rol del usuario:");
-        add(etiquetaRol);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Rol del usuario:"), gbc);
+        seleccionarRol = new JComboBox<>(new String[]{"Tesorero", "Socio"});
+        seleccionarRol.setFont(new Font("Arial", Font.PLAIN, 14));
+        panelCentral.add(seleccionarRol, gbc);
 
-        selectorRol = new JComboBox<>(new String[]{"Tesorero", "Socio"});
-        selectorRol.setBounds(20, 296, 340, 35);
-        add(selectorRol);
+        add(panelCentral, BorderLayout.CENTER);
 
-        JButton botonGuardar = ComponentesUI.crearBoton("Registrar usuario",
+        JPanel panelInferior = ComponentesUI.crearPanel();
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 30, 40));
+        panelInferior.setLayout(new GridLayout(1, 2, 10, 0));
+
+        JButton btnRegistrar = ComponentesUI.crearBoton("Registrar",
                 e -> guardarUsuario());
-        add(botonGuardar);
-
-        JButton botonCancelar = ComponentesUI.crearBoton("Cancelar",
+        JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar",
                 e -> dispose());
-        add(botonCancelar);
+
+        panelInferior.add(btnRegistrar);
+        panelInferior.add(btnCancelar);
+
+        add(panelInferior, BorderLayout.SOUTH);
+
         setVisible(true);
     }
 
@@ -68,7 +77,7 @@ public class VentanaCrearUsuario extends JFrame {
             return;
         }
 
-        String rolSeleccionado = selectorRol.getSelectedItem().toString();
+        String rolSeleccionado = seleccionarRol.getSelectedItem().toString();
         RolUsuario rol = rolSeleccionado.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
 
         try {
