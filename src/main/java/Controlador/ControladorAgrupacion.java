@@ -48,12 +48,22 @@ public class ControladorAgrupacion {
     }
 
     public void agregarMiembro(String idAgrupacion, Usuario usuario) {
-        Agrupacion agrupacion = buscarPorId(idAgrupacion);
-        if (agrupacion == null) {
-            throw new IllegalArgumentException("No existe una agrupación con ese id.");
+        Agrupacion nuevaAgrupacion = buscarPorId(idAgrupacion);
+        if (nuevaAgrupacion == null) {
+            throw new IllegalArgumentException("No existe la agrupación destino.");
         }
 
-        agrupacion.agregarMiembro(usuario.getIdUsuario());
+        // Si el usuario ya pertenecía a otra agrupación, lo quitamos de ella primero
+        String idAgrupacionAnterior = usuario.getIdAgrupacion();
+        if (idAgrupacionAnterior != null && !idAgrupacionAnterior.equals(ID_AGRUPACION_PRINCIPAL)) {
+            Agrupacion anterior = buscarPorId(idAgrupacionAnterior);
+            if (anterior != null) {
+                anterior.quitarMiembro(usuario.getIdUsuario());
+            }
+        }
+
+        // Agregamos al usuario a la nueva agrupación
+        nuevaAgrupacion.agregarMiembro(usuario.getIdUsuario());
         controladorUsuario.actualizarAgrupacionDeUsuario(usuario, idAgrupacion);
 
         GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);

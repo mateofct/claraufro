@@ -13,7 +13,7 @@ public class ComponentesUI {
     public static final Font FUENTE_SUBTITULO = new Font("Arial", Font.BOLD, 22);
     public static final Font FUENTE_ETIQUETA = new Font("Arial", Font.BOLD, 15);
     public static final Font FUENTE_BOTON = new Font("Arial", Font.BOLD, 14);
-
+    public static Color COLOR_TEXTO_ETIQUETA = Color.WHITE;
 
     public static JLabel crearTitulo(String texto) {
         JLabel titulo = new JLabel(texto,  JLabel.CENTER);

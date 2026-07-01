@@ -143,10 +143,12 @@ public class ControladorUsuario {
         GestorArchivosCSV.guardarTodosUsuarios(usuarios);
     }
 
-    public void cerrarSesion() {
-        this.usuarioActivo = null;
-    }
     public Usuario getUsuarioActivo() {
         return usuarioActivo;
     }
+
+    public void cerrarSesion() {
+        this.usuarioActivo = null;
+    }
+
 }
