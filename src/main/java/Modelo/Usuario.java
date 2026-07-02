@@ -1,5 +1,7 @@
 package Modelo;
+
 import java.util.UUID;
+
 public class Usuario {
     private String idUsuario;
     private String idAgrupacion;
@@ -19,7 +21,6 @@ public class Usuario {
 
 
     public String getIdUsuario() {
-
         return idUsuario;
     }
     public String getIdAgrupacion() {
@@ -39,9 +40,6 @@ public class Usuario {
     }
 
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
@@ -51,6 +49,12 @@ public class Usuario {
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
+    public void setIdAgrupacion(String idAgrupacion) {
+        this.idAgrupacion = idAgrupacion;
+    }
 
-
+    @Override
+    public String toString() {
+        return this.nombre + " (" + this.matricula + ")";
+    }
 }

@@ -1,9 +1,6 @@
 package Controlador;
 
-import Modelo.Movimiento;
-import Modelo.TipoMovimiento;
-import Modelo.Usuario;
-
+import Modelo.*;
 import java.util.ArrayList;
 import java.util.List;
 

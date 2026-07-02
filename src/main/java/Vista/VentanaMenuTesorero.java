@@ -1,19 +1,21 @@
 package Vista;
-import javax.swing.*;
-import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class VentanaMenuTesorero extends JFrame{
-
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
+    private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
         this.controladorUsuario = controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
+        this.controladorAgrupacion = controladorAgrupacion;
         String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
 
         setTitle("CLARA - Menu Tesorero");
@@ -53,11 +55,7 @@ public class VentanaMenuTesorero extends JFrame{
         botonIngreso.setForeground(new Color(29, 130, 80));
         botonIngreso.setBounds(20, 128, 350, 45);
         botonIngreso.setHorizontalAlignment(JButton.LEFT);
-        botonIngreso.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), true);
-            }
-        });
+        botonIngreso.addActionListener(e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), true));
         add(botonIngreso);
 
         JButton botonEgreso = new JButton("Registrar egreso");
@@ -67,11 +65,7 @@ public class VentanaMenuTesorero extends JFrame{
         botonEgreso.setBounds(20, 176, 350, 45);
         botonEgreso.setFocusPainted(false);
         botonEgreso.setHorizontalAlignment(JButton.LEFT);
-        botonEgreso.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), false);
-            }
-        });
+        botonEgreso.addActionListener(e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), false));
         add(botonEgreso);
 
         JLabel seccionConsultas = new JLabel("CONSULTAS");
@@ -86,11 +80,7 @@ public class VentanaMenuTesorero extends JFrame{
         botonVerSaldo.setBounds(20, 258, 350, 45);
         botonVerSaldo.setFocusPainted(false);
         botonVerSaldo.setHorizontalAlignment(JButton.LEFT);
-        botonVerSaldo.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo());
-            }
-        });
+        botonVerSaldo.addActionListener(e -> new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo()));
         add(botonVerSaldo);
 
         JButton botonHistorial = new JButton("Ver historial de movimientos");
@@ -98,11 +88,7 @@ public class VentanaMenuTesorero extends JFrame{
         botonHistorial.setBackground(Color.WHITE);
         botonHistorial.setBounds(20, 306, 350, 45);
         botonHistorial.setHorizontalAlignment(JButton.LEFT);
-        botonHistorial.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo());
-            }
-        });
+        botonHistorial.addActionListener(e -> new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo()));
         add(botonHistorial);
 
         JButton botonCerrarSesion = new JButton("Cerrar sesion");
@@ -110,17 +96,12 @@ public class VentanaMenuTesorero extends JFrame{
         botonCerrarSesion.setBackground(new Color(220, 50, 50));
         botonCerrarSesion.setForeground(Color.WHITE);
         botonCerrarSesion.setBounds(20, 410, 350, 45);
-        botonCerrarSesion.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        botonCerrarSesion.addActionListener(e ->{
                 controladorUsuario.cerrarSesion();
                 dispose();
-                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas);
-            }
+                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
         });
         add(botonCerrarSesion);
         setVisible(true);
-
-
-
     }
 }

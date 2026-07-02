@@ -2,12 +2,13 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+
+import Controlador.ControladorAgrupacion;
 import Controlador.ControladorFinanzas;
 import Controlador.ControladorUsuario;
 import Modelo.RolUsuario;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 
 public class VentanaIniciarSesion extends JFrame {
 
@@ -15,10 +16,13 @@ public class VentanaIniciarSesion extends JFrame {
     private JPasswordField EscribirContraseña;
     private ControladorFinanzas controladorFinanzas;
     private ControladorUsuario controladorUsuario;
+    private ControladorAgrupacion controladorAgrupacion;
 
-    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas) {
+    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
         this.controladorFinanzas = controladorFinanzas;
         this.controladorUsuario = controladorUsuario;
+        this.controladorAgrupacion = controladorAgrupacion;
+
         setTitle("Iniciar Sesión - CLARA");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,9 +37,8 @@ public class VentanaIniciarSesion extends JFrame {
         add(titulo);
 
         JLabel subtitulo = new JLabel("Iniciar Sesión");
-        subtitulo.setFont(new Font("Arial", Font.PLAIN, 13));
-        subtitulo.setForeground(Color.GRAY);
-        subtitulo.setBounds(90, 60, 250, 20);
+        subtitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        subtitulo.setBounds(60, 80, 250, 20);
         add(subtitulo);
 
         JLabel etiquetaMatricula = new JLabel("Matrícula:");
@@ -71,8 +74,6 @@ public class VentanaIniciarSesion extends JFrame {
         });
         add(botonIngresar);
         setVisible(true);
-
-
     }
 
     private void intentarLogin() {
@@ -92,19 +93,16 @@ public class VentanaIniciarSesion extends JFrame {
             RolUsuario rol = controladorUsuario.getUsuarioActivo().getRol();
 
             if(rol==RolUsuario.ADMIN){
-                new VentanaMenuAdmin(controladorUsuario,controladorFinanzas);
+                new VentanaMenuAdmin(controladorUsuario, controladorFinanzas, controladorAgrupacion);
                 
             } else if (rol==RolUsuario.TESORERO) {
-                new VentanaMenuTesorero(controladorUsuario,controladorFinanzas);
+                new VentanaMenuTesorero(controladorUsuario, controladorFinanzas, controladorAgrupacion);
                 
             } else if (rol==RolUsuario.SOCIO) {
-                new VentanaMenuSocio(controladorUsuario,controladorFinanzas);
-                
+                new VentanaMenuSocio(controladorUsuario, controladorFinanzas, controladorAgrupacion);
             }
         }
     }
-
-
 }
 
 
