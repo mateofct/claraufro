@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class GestorMatriculas implements IFuenteMatriculas {
 
     private static final String RUTA_MATRICULAS_EXTERNAS = "data/matriculas_externas.csv";
-    private static final String PATRON_MATRICULA = "^[0-9k]+$";
+    private static final String PATRON_MATRICULA = "^[0-9k]{11}$";
 
     public static String normalizarMatricula(String matricula) {
         if (matricula == null) {

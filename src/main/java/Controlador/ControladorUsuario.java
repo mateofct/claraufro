@@ -19,10 +19,10 @@ public class ControladorUsuario {
         this.usuarioActivo = null;
 
         if (this.usuarios.isEmpty()) {
-            registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1");
+            registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "11111111111");
             // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
-            registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2");
-            registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "3");
+            registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "22222222222");
+            registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "33333333333");
         }
     }
 
