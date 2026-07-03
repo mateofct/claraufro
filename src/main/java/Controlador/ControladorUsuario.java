@@ -19,10 +19,14 @@ public class ControladorUsuario {
         this.usuarioActivo = null;
 
         if (this.usuarios.isEmpty()) {
-            registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1");
-            // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
-            registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2");
-            registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "3");
+            try {
+                registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111K");
+                // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
+                registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222K");
+                registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "33333333333");
+            } catch (Exception e) {
+                throw new RuntimeException("Error al registrar usuario inicial: " + e.getMessage());
+            }
         }
     }
 
@@ -39,10 +43,8 @@ public class ControladorUsuario {
         return false;
     }
 
-    public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula) {
-        if (!GestorMatriculas.validarFormatoMatricula(matricula)) {
-            throw new IllegalArgumentException("La matricula tiene un formato no valido");
-        }
+    public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula){
+
         for (Usuario u : usuarios) {
             if (u.getMatricula().equals(matricula)) {
                 throw new IllegalArgumentException("La matricula ya existe en el registro de CLARA.");
@@ -53,6 +55,7 @@ public class ControladorUsuario {
         }
 
         String nombreReal = fuenteMatriculas.buscarNombrePorMatricula(matricula);
+
         String contrasenaCifrada = GestorSeguridad.cifrar(contrasena);
         Usuario nuevo = new Usuario(idAgrupacion, nombreReal, contrasenaCifrada, rol, matricula);
         usuarios.add(nuevo);
