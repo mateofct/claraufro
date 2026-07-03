@@ -18,8 +18,7 @@ public class GestorEstudiantesUniversidad implements IFuenteMatriculas{
             String matriculaBuscada = GestorMatriculas.normalizarMatricula(matricula);
 
             if (!GestorMatriculas.validarFormatoMatricula(matriculaBuscada)) {
-                throw new IllegalArgumentException("La matrícula no tiene un formato válido: " + matricula +
-                        ". Debe tener exactamente 11 números (incluyendo la letra 'k')");
+                throw new IllegalArgumentException("La matrícula no tiene un formato válido: " + matricula + ". Debe tener exactamente 11 números (incluyendo la letra 'k')");
             }
 
             File archivo = new File(RUTA_BASE_ESTUDIANTES_UNIVERSIDAD);
