@@ -1,187 +1,133 @@
 package Vista;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import Modelo.Usuario;
 import Modelo.TipoMovimiento;
 import Controlador.ControladorFinanzas;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
-public class VentanaRegistrarMovimiento extends JFrame{
+public class VentanaRegistrarMovimiento extends JFrame {
     private ControladorFinanzas controladorFinanzas;
     private Usuario usuario;
-    private boolean Ingreso;
-    private JTextField EscribirMonto;
-    private JTextField EscribirDescripcion;
+    private boolean esIngreso;
+    private JTextField campoMonto;
+    private JTextField campoDescripcion;
     private File archivoComprobante = null;
+    private JButton botonSubirArchivo;
 
-    public VentanaRegistrarMovimiento(ControladorFinanzas controladorFinanzas, Usuario usuario, boolean Ingreso){
+    public VentanaRegistrarMovimiento(ControladorFinanzas controladorFinanzas, Usuario usuario, boolean esIngreso) {
         this.controladorFinanzas = controladorFinanzas;
         this.usuario = usuario;
-        this.Ingreso = Ingreso;
+        this.esIngreso = esIngreso;
 
-
-        if (Ingreso) {
-            setTitle("Registrar Ingreso");
-        } else {
-            setTitle("Registrar Egreso");
-        }
-
-        setSize(400, 380);
-        setLayout(null);
+        setTitle(esIngreso ? "CLARA - Registrar Ingreso" : "CLARA - Registrar Egreso");
+        setSize(450, 550);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(102, 133, 183, 255));
 
-        Color colorTipo;
-        if (Ingreso) {
-            colorTipo = new Color(29, 158, 117);
-        } else {
-            colorTipo = new Color(200, 50, 50);
-        }
+        setLayout(new BorderLayout());
+        ComponentesUI.configurarFondo(this);
 
-        String textoTitulo;
-        if (Ingreso) {
-            textoTitulo = "Registrar Ingreso";
-        } else {
-            textoTitulo = "Registrar Egreso";
-        }
-        JLabel titulo = new JLabel(textoTitulo);
-        titulo.setFont(new Font("Arial", Font.BOLD, 18));
-        titulo.setForeground(Color.WHITE);
-        titulo.setBounds(20, 10, 300, 30);
-        add(titulo);
+        // --- PANEL SUPERIOR ---
+        JPanel panelSuperior = ComponentesUI.crearPanel();
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+
+        JLabel titulo = ComponentesUI.crearSubtitulo(esIngreso ? "Registrar Ingreso" : "Registrar Egreso");
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSuperior.add(titulo);
 
         int saldoActual = controladorFinanzas.calcularSaldo(usuario.getIdAgrupacion());
         JLabel etiquetaSaldo = new JLabel("Saldo actual: $" + saldoActual);
-        etiquetaSaldo.setFont(new Font("Arial", Font.PLAIN, 12));
+        etiquetaSaldo.setFont(new Font("Arial", Font.ITALIC, 13));
         etiquetaSaldo.setForeground(Color.WHITE);
-        etiquetaSaldo.setBounds(20, 42, 300, 20);
-        add(etiquetaSaldo);
+        etiquetaSaldo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSuperior.add(etiquetaSaldo);
 
-        JLabel etiquetaMonto = new JLabel("Monto $:");
-        etiquetaMonto.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaMonto.setBounds(20, 88, 340, 20);
-        add(etiquetaMonto);
+        add(panelSuperior, BorderLayout.NORTH);
 
-        EscribirMonto = new JTextField();
-        EscribirMonto.setFont(new Font("Arial", Font.PLAIN, 13));
-        EscribirMonto.setBounds(20, 110, 340, 35);
-        add(EscribirMonto);
+        // --- PANEL CENTRAL ---
+        JPanel panelCentral = ComponentesUI.crearPanel();
+        panelCentral.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 40, 5, 40);
 
-        JLabel etiquetaDescripcion = new JLabel("Descripción del movimiento:");
-        etiquetaDescripcion.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaDescripcion.setBounds(20, 158, 340, 20);
-        add(etiquetaDescripcion);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Monto ($):"), gbc);
+        campoMonto = ComponentesUI.crearCampoTexto();
+        panelCentral.add(campoMonto, gbc);
 
-        EscribirDescripcion = new JTextField();
-        EscribirDescripcion.setFont(new Font("Arial", Font.PLAIN, 13));
-        EscribirDescripcion.setBounds(20, 180, 340, 35);
-        add(EscribirDescripcion);
+        gbc.insets = new Insets(15, 40, 5, 40);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Descripción:"), gbc);
+        campoDescripcion = ComponentesUI.crearCampoTexto();
+        panelCentral.add(campoDescripcion, gbc);
 
-        JLabel etiquetaComprobante = new JLabel("Comprobante del movimiento:");
-        etiquetaComprobante.setFont(new Font("Arial", Font.BOLD, 13));
-        etiquetaComprobante.setBounds(20, 228, 340, 20);
-        add(etiquetaComprobante);
+        gbc.insets = new Insets(15, 40, 5, 40);
+        panelCentral.add(ComponentesUI.crearEtiqueta("Comprobante (PDF):"), gbc);
+        botonSubirArchivo = ComponentesUI.crearBoton("Seleccionar Archivo", e -> seleccionarArchivo());
+        panelCentral.add(botonSubirArchivo, gbc);
 
-        JButton botonSubirPDF = new JButton("Seleccionar archivo PDF del comprobante");
-        botonSubirPDF.setFont(new Font("Arial", Font.PLAIN, 13));
-        botonSubirPDF.setBackground(Color.WHITE);
-        botonSubirPDF.setBounds(20, 250, 340, 35);
+        add(panelCentral, BorderLayout.CENTER);
 
-        botonSubirPDF.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser seleccionador = new JFileChooser();
-                seleccionador.setDialogTitle("Seleccione el PDF del Comprobante");
-                int resultado = seleccionador.showOpenDialog(VentanaRegistrarMovimiento.this);
+        // --- PANEL INFERIOR ---
+        JPanel panelInferior = ComponentesUI.crearPanel();
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 40, 40));
+        panelInferior.setLayout(new GridLayout(1, 2, 15, 0));
 
-                if (resultado == JFileChooser.APPROVE_OPTION) {
-                    archivoComprobante = seleccionador.getSelectedFile();
-                    botonSubirPDF.setText("Archivo subido: " + archivoComprobante.getName());
-                    botonSubirPDF.setBackground(new Color(210, 235, 220));
-                }
-            }
-        });
-        add(botonSubirPDF);
-
-        JLabel RegistroUsuario = new JLabel("Registrado por: " + usuario.getNombre());
-        RegistroUsuario.setFont(new Font("Arial", Font.ITALIC, 11));
-        RegistroUsuario.setForeground(Color.GRAY);
-        RegistroUsuario.setBounds(20, 246, 340, 20);
-        add(RegistroUsuario);
-
-        String textoBoton;
-        if (Ingreso) {
-            textoBoton = "Guardar ingreso";
+        JButton botonGuardar = ComponentesUI.crearBoton(esIngreso ? "Guardar Ingreso" : "Guardar Egreso", e -> guardarMovimiento());
+        if (esIngreso) {
+            botonGuardar.setBackground(new Color(40, 167, 69));
+            botonGuardar.setForeground(Color.WHITE);
         } else {
-            textoBoton = "Guardar egreso";
+            botonGuardar.setBackground(new Color(220, 53, 69));
+            botonGuardar.setForeground(Color.WHITE);
         }
 
-        JButton botonGuardar = new JButton(textoBoton);
-        botonGuardar.setFont(new Font("Arial", Font.BOLD, 13));
-        botonGuardar.setBackground(colorTipo);
-        botonGuardar.setForeground(Color.WHITE);
-        botonGuardar.setBounds(20, 295, 160, 38);
+        JButton botonCancelar = ComponentesUI.crearBoton("Cancelar", e -> dispose());
 
-        botonGuardar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                guardarMovimiento();
-            }
-        });
-        add(botonGuardar);
+        panelInferior.add(botonGuardar);
+        panelInferior.add(botonCancelar);
 
-        JButton botonCancelar = new JButton("Cancelar");
-        botonCancelar.setFont(new Font("Arial", Font.BOLD, 13));
-        botonCancelar.setBackground(Color.WHITE);
-        botonCancelar.setBounds(200, 295, 160, 38);
+        add(panelInferior, BorderLayout.SOUTH);
 
-        botonCancelar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-        add(botonCancelar);
         setVisible(true);
+    }
 
-
+    private void seleccionarArchivo() {
+        JFileChooser selector = new JFileChooser();
+        selector.setDialogTitle("Seleccione el comprobante");
+        int resultado = selector.showOpenDialog(this);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            archivoComprobante = selector.getSelectedFile();
+            botonSubirArchivo.setText(archivoComprobante.getName());
+            botonSubirArchivo.setBackground(new Color(200, 255, 200));
+        }
     }
 
     private void guardarMovimiento() {
         try {
-            String montoTexto   = EscribirMonto.getText().trim();
-            String descripcion  = EscribirDescripcion.getText().trim();
+            String montoStr = campoMonto.getText().trim();
+            String desc = campoDescripcion.getText().trim();
 
-            if (montoTexto.isEmpty() || descripcion.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Debe ingresar el monto y la descripción.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            if (montoStr.isEmpty() || desc.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor complete el monto y la descripción.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            int monto = Integer.parseInt(montoTexto);
-            TipoMovimiento tipo;
+            int monto = Integer.parseInt(montoStr);
+            TipoMovimiento tipo = esIngreso ? TipoMovimiento.INGRESO : TipoMovimiento.EGRESO;
+            String ruta = (archivoComprobante != null) ? archivoComprobante.getAbsolutePath() : "";
 
-            if (Ingreso) {
-                tipo = TipoMovimiento.INGRESO;
-            } else {
-                tipo = TipoMovimiento.EGRESO;
-            }
-
-            // CORRECCIÓN LÍNEA 161: Extracción segura de la ruta a String
-            String rutaAbsoluta = (archivoComprobante != null) ? archivoComprobante.getAbsolutePath() : "";
-
-            controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, descripcion, rutaAbsoluta, usuario.getIdUsuario());
-
-            // Si el controlador no interrumpe el flujo, es un éxito real
-            JOptionPane.showMessageDialog(this, "Movimiento registrado correctamente");
+            controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, desc, ruta, usuario.getIdUsuario());
+            JOptionPane.showMessageDialog(this, "Movimiento registrado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             dispose();
 
         } catch (NumberFormatException ex) {
-            // Caso límite: el usuario puso letras o símbolos en el monto
-            JOptionPane.showMessageDialog(this, "El monto debe ser un número entero válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
-        } catch (RuntimeException ex) {
-            // Caso límite: Atrapa los fallos de saldo insuficiente o montos negativos de tu Main.Controlador
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error en el registro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El monto debe ser un número válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
 }
