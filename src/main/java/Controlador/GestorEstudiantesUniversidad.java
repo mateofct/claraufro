@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class GestorEstudiantesUniversidad implements IFuenteMatriculas {
+
     private static final String RUTA_BASE_ESTUDIANTES_UNIVERSIDAD = "data/base_estudiantes_universidad.csv";
     private final String rutaArchivo;
 
@@ -19,6 +20,7 @@ public class GestorEstudiantesUniversidad implements IFuenteMatriculas {
 
     @Override
     public String buscarNombrePorMatricula(String matricula) {
+
         try {
             String matriculaBuscada = GestorMatriculas.normalizarMatricula(matricula);
 
@@ -27,12 +29,15 @@ public class GestorEstudiantesUniversidad implements IFuenteMatriculas {
             }
 
             File archivo = new File(this.rutaArchivo);
+
             if (!archivo.exists()) {
                 throw new RuntimeException("No se encontró el archivo de la base de datos de estudiantes en: " + this.rutaArchivo);
             }
 
             try (BufferedReader bufferedReader = new BufferedReader(new FileReader(archivo))) {
+
                 String linea;
+
                 while ((linea = bufferedReader.readLine()) != null) {
                     String[] datos = linea.split(";");
 
