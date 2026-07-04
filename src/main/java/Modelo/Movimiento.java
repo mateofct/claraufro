@@ -24,7 +24,6 @@ public class Movimiento {
         this.rutaComprobante = rutaComprobante;
         this.idUsuarioQueRegistra = idUsuarioQueRegistra;
         this.fechaMovimiento = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
     }
 
     public String getIdMovimiento() {
@@ -51,20 +50,4 @@ public class Movimiento {
     public String getIdUsuarioQueRegistra() {
         return idUsuarioQueRegistra;
     }
-
-
-
-    public void setTipoMovimiento(TipoMovimiento tipoMovimiento) {
-        this.tipoMovimiento = tipoMovimiento;
-    }
-    public void setMonto(int monto) {
-        this.monto = monto;
-    }
-    public void setDescripcionMovimiento(String descripcionMovimiento) {
-        this.descripcionMovimiento = descripcionMovimiento;
-    }
-    public void setRutaComprobante(String rutaComprobante) {
-        this.rutaComprobante = rutaComprobante;
-    }
-
 }

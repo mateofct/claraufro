@@ -80,7 +80,7 @@ public class ControladorUsuario {
 
     public void cambiarPropiaContrasena(String contrasenaActual, String contrasenaNueva) {
         if (usuarioActivo == null) {
-            throw new IllegalStateException("No hay una sesión activa.");
+            throw new IllegalArgumentException("No hay una sesión activa.");
         }
 
         String contrasenaDescifrada = GestorSeguridad.descifrar(usuarioActivo.getContraseña());
@@ -98,7 +98,7 @@ public class ControladorUsuario {
 
     public void editarUsuarioComoAdmin(String idUsuarioObjetivo, String nuevaContrasenaSinCifrar, RolUsuario nuevoRol) {
         if (usuarioActivo == null || usuarioActivo.getRol() != RolUsuario.ADMIN) {
-            throw new IllegalStateException("Solo el Administrador puede editar otros usuarios.");
+            throw new IllegalArgumentException("Solo el Administrador puede editar otros usuarios.");
         }
 
         Usuario objetivo = buscarUsuarioPorId(idUsuarioObjetivo);
@@ -135,7 +135,7 @@ public class ControladorUsuario {
             throw new IllegalArgumentException("No existe un usuario con ese id.");
         }
         if (usuarioSeleccionado.getRol() == RolUsuario.ADMIN) {
-            throw new IllegalStateException("No se puede eliminar al Administrador.");
+            throw new IllegalArgumentException("No se puede eliminar al Administrador.");
         }
         usuarios.remove(usuarioSeleccionado);
         GestorArchivosCSV.guardarTodosUsuarios(usuarios);

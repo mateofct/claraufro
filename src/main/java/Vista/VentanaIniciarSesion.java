@@ -47,14 +47,15 @@ public class VentanaIniciarSesion extends JFrame {
         panelCentral.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 50, 5, 50);
+        gbc.insets = new Insets(10, 20, 5, 20);
 
         panelCentral.add(ComponentesUI.crearEtiqueta("Matrícula:"), gbc);
         campoMatricula = ComponentesUI.crearCampoTexto();
         panelCentral.add(campoMatricula, gbc);
 
-        gbc.insets = new Insets(15, 50, 5, 50);
+        gbc.insets = new Insets(15, 20, 5, 20);
         panelCentral.add(ComponentesUI.crearEtiqueta("Contraseña:"), gbc);
         campoContrasena = ComponentesUI.crearCampoContrasena();
         panelCentral.add(campoContrasena, gbc);
