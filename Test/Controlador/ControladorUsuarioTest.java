@@ -10,7 +10,7 @@ public class ControladorUsuarioTest {
     @Test
     void testIniciarSesionConDatosCorrectos() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "11111111101");
 
         boolean resultado = controlador.iniciarSesion("11111111101", "123");
@@ -22,7 +22,7 @@ public class ControladorUsuarioTest {
     @Test
     void testIniciarSesionConDatosIncorrectos() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "clave123", "11111111102");
 
         boolean resultado = controlador.iniciarSesion("11111111102", "claveIncorrecta");
@@ -33,7 +33,7 @@ public class ControladorUsuarioTest {
     @Test
     void testRegistrarUsuarioNuevo() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         Usuario nuevoUsuario = controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "11111111103");
 
         assertEquals("Estudiante Tres", nuevoUsuario.getNombre());
@@ -43,7 +43,7 @@ public class ControladorUsuarioTest {
     @Test
     void testNoRegistrarLaMismaMatriculaDosVeces() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "11111111104");
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -54,7 +54,7 @@ public class ControladorUsuarioTest {
     @Test
     void testNoDejaRegistrarUnaMatriculaQueNoExisteEnLaUniversidad() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
 
         assertThrows(IllegalArgumentException.class, () -> {
             controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "00000000024");
@@ -64,7 +64,7 @@ public class ControladorUsuarioTest {
     @Test
     void testNoDejaRegistrarConContraseñaMuyLarga() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         String contraseñaMuyLarga = "1234567890123456789012345";
 
         assertThrows(IllegalArgumentException.class, () -> {
@@ -75,7 +75,7 @@ public class ControladorUsuarioTest {
     @Test
     void testNoSePuedeEliminarAlAdministrador() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         Usuario admin = controlador.registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "11111111106");
 
         assertThrows(IllegalStateException.class, () -> {controlador.eliminarUsuario(admin.getIdUsuario());
@@ -85,7 +85,7 @@ public class ControladorUsuarioTest {
     @Test
     void testCerrarSesionDejaSinUsuarioActivo() {
 
-        ControladorUsuario controlador = new ControladorUsuario(new GestorMatriculas());
+        ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "11111111107");
         controlador.iniciarSesion("11111111106", "123");
         controlador.cerrarSesion();

@@ -2,7 +2,7 @@ package Controlador;
 
 import java.util.regex.Pattern;
 
-public class GestorMatriculas {
+public class GestorMatriculas implements IFuenteMatriculas {
 
     private static final String PATRON_MATRICULA = "^[0-9k]{11}$";
 
