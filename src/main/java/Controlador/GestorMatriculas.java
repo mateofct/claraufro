@@ -2,7 +2,7 @@ package Controlador;
 
 import java.util.regex.Pattern;
 
-public class GestorMatriculas implements IFuenteMatriculas {
+public class GestorMatriculas {
 
     private static final String PATRON_MATRICULA = "^[0-9k]{11}$";
 
@@ -20,5 +20,6 @@ public class GestorMatriculas implements IFuenteMatriculas {
         String matriculaNormalizada = normalizarMatricula(matricula);
         return Pattern.matches(PATRON_MATRICULA, matriculaNormalizada);
     }
+
 
 }

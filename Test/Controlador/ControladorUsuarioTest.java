@@ -11,6 +11,7 @@ public class ControladorUsuarioTest {
     void testIniciarSesionConDatosCorrectos() {
 
         ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
+
         controlador.registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "11111111101");
 
         boolean resultado = controlador.iniciarSesion("11111111101", "123");
