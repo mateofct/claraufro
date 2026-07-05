@@ -2,11 +2,10 @@ package Controlador;
 
 import Modelo.Usuario;
 import Modelo.RolUsuario;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
-import Vista.*;
-import java.awt.event.ActionEvent;
 
 /**
  * Controlador para la gestión de usuarios.
@@ -34,44 +33,6 @@ public class ControladorUsuario {
         }
     }
 
-    public void mostrarLogin(ControladorFinanzas cf, ControladorAgrupacion ca) {
-        VentanaIniciarSesion vista = new VentanaIniciarSesion();
-
-
-        vista.setAccionLogin(e -> {
-            String mat = vista.getMatricula();
-            String pass = vista.getContrasena();
-
-            if (mat.isEmpty() || pass.isEmpty()) {
-                vista.mostrarError("Los campos no deben estar vacíos");
-                return;
-            }
-
-            if (this.iniciarSesion(mat, pass)) {
-                Usuario activo = this.getUsuarioActivo();
-                vista.dispose(); // Cerramos login
-
-                // El controlador decide qué ventana abrir
-                switch (activo.getRol()) {
-                    case ADMIN:
-                        new VentanaMenuAdmin(this, cf, ca); // Deberías refactorizar estas también
-                        break;
-                    case TESORERO:
-                        new VentanaMenuTesorero(this, cf, ca);
-                        break;
-                    case SOCIO:
-                        new VentanaMenuSocio(this, cf, ca);
-                        break;
-                }
-            } else {
-                vista.mostrarError("Matrícula o contraseña incorrectos.");
-                vista.limpiarContrasena();
-            }
-        });
-
-        vista.setVisible(true);
-    }
-
     public boolean iniciarSesion(String matricula, String contrasena) {
         // NORMALIZACIÓN: Usamos normalización para que no importe K o k
         String matriculaBuscada = GestorMatriculas.normalizarMatricula(matricula);
@@ -90,6 +51,7 @@ public class ControladorUsuario {
     }
 
     public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula){
+        // NORMALIZACIÓN: La matrícula se guarda siempre normalizada
         String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
 
         for (Usuario u : usuarios) {

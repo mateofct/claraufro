@@ -1,12 +1,10 @@
-VentanaMenuAdmin.java
-        1
-        100 %
-        package Vista;
+package Vista;
 
 import javax.swing.*;
 import java.awt.*;
 import Controlador.ControladorPrincipal;
 import Controlador.ControladorUsuario;
+import Vista.ComponentesUI;
 
 /**
  * Menú principal para el Administrador.
