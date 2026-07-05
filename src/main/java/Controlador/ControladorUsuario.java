@@ -8,6 +8,10 @@ import java.util.Collections;
 import Vista.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * Controlador para la gestión de usuarios.
+ * Se ha mejorado para que las matrículas sean insensibles a mayúsculas/minúsculas.
+ */
 public class ControladorUsuario {
     private List<Usuario> usuarios;
     private Usuario usuarioActivo;
@@ -22,7 +26,6 @@ public class ControladorUsuario {
         if (this.usuarios.isEmpty()) {
             try {
                 registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111k");
-                // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
                 registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222k");
                 registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "3333333333k");
             } catch (Exception e) {
@@ -70,9 +73,12 @@ public class ControladorUsuario {
     }
 
     public boolean iniciarSesion(String matricula, String contrasena) {
-        String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
+        // NORMALIZACIÓN: Usamos normalización para que no importe K o k
+        String matriculaBuscada = GestorMatriculas.normalizarMatricula(matricula);
+
         for (Usuario usuario : usuarios) {
-            if (usuario.getMatricula().equalsIgnoreCase(matriculaNormalizada)) {
+            // COMPARACIÓN INSENSIBLE: Usamos equalsIgnoreCase para mayor seguridad
+            if (usuario.getMatricula().equalsIgnoreCase(matriculaBuscada)) {
                 String contrasenaDescifrada = GestorSeguridad.descifrar(usuario.getContraseña());
                 if (contrasenaDescifrada.equals(contrasena)) {
                     this.usuarioActivo = usuario;
@@ -84,7 +90,6 @@ public class ControladorUsuario {
     }
 
     public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula){
-
         String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
 
         for (Usuario u : usuarios) {
@@ -96,10 +101,10 @@ public class ControladorUsuario {
             throw new IllegalArgumentException("La contraseña no puede superar los " + MAX_LARGO_CONTRASENA + " caracteres.");
         }
 
-        String nombreReal = fuenteMatriculas.buscarNombrePorMatricula(matricula);
+        String nombreReal = fuenteMatriculas.buscarNombrePorMatricula(matriculaNormalizada);
 
         String contrasenaCifrada = GestorSeguridad.cifrar(contrasena);
-        Usuario nuevo = new Usuario(idAgrupacion, nombreReal, contrasenaCifrada, rol, matricula);
+        Usuario nuevo = new Usuario(idAgrupacion, nombreReal, contrasenaCifrada, rol, matriculaNormalizada);
         usuarios.add(nuevo);
 
         GestorArchivosCSV.guardarUsuario(nuevo);

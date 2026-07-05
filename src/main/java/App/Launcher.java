@@ -1,14 +1,29 @@
 package App;
 
 import Controlador.*;
-import Vista.VentanaIniciarSesion;
 
+/**
+ * Punto de entrada de la aplicación.
+ * Configura las dependencias iniciales e inicia el Controlador Principal.
+ */
 public class Launcher {
     public static void main(String[] args) {
+        // 1. Inicializar la fuente de datos
         IFuenteMatriculas fuenteMatriculas = new GestorEstudiantesUniversidad();
-        ControladorUsuario controladorUsuario   = new ControladorUsuario(fuenteMatriculas); // Para poder cambiarlo si se puede, a google sheets
+
+        // 2. Inicializar los controladores de lógica de negocio
+        ControladorUsuario controladorUsuario = new ControladorUsuario(fuenteMatriculas);
         ControladorFinanzas controladorFinanzas = new ControladorFinanzas();
         ControladorAgrupacion controladorAgrupacion = new ControladorAgrupacion(controladorUsuario);
-        new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
+
+        // 3. Inicializar el Controlador Principal (Orquestador)
+        ControladorPrincipal controladorPrincipal = new ControladorPrincipal(
+                controladorUsuario,
+                controladorFinanzas,
+                controladorAgrupacion
+        );
+
+        // 4. Iniciar la aplicación
+        controladorPrincipal.iniciar();
     }
 }

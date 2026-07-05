@@ -1,27 +1,30 @@
 package Vista;
 
-import Controlador.ControladorUsuario;
 import Modelo.Usuario;
+import Modelo.RolUsuario;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Vista para gestionar usuarios.
+ * MVC Puro: No conoce al controlador. Expone métodos para manipular la tabla y los campos.
+ */
 public class VentanaGestionarUsuario extends JFrame {
-    private ControladorUsuario controladorUsuario;
     private JTable tablaUsuarios;
     private DefaultTableModel modeloTablaUsuarios;
     private JTextField campoBusqueda;
     private JTextField campoMatriculaEdicion;
     private JTextField campoNombreEdicion;
-    private JComboBox<Modelo.RolUsuario> comboRolEdicion;
+    private JComboBox<RolUsuario> comboRolEdicion;
+    private JButton botonGuardarCambios;
+    private JButton botonEliminar;
 
-    public VentanaGestionarUsuario(ControladorUsuario controladorUsuario) {
-        this.controladorUsuario = controladorUsuario;
-
+    public VentanaGestionarUsuario() {
         setTitle("CLARA - Gestionar Usuarios");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -37,11 +40,6 @@ public class VentanaGestionarUsuario extends JFrame {
         panelSuperior.add(ComponentesUI.crearEtiqueta("Buscar (Matrícula/Nombre):"));
         campoBusqueda = ComponentesUI.crearCampoTexto();
         campoBusqueda.setPreferredSize(new Dimension(200, 30));
-        campoBusqueda.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { cargarUsuarios(); }
-            public void removeUpdate(DocumentEvent e) { cargarUsuarios(); }
-            public void changedUpdate(DocumentEvent e) { cargarUsuarios(); }
-        });
         panelSuperior.add(campoBusqueda);
 
         add(panelSuperior, BorderLayout.NORTH);
@@ -49,7 +47,7 @@ public class VentanaGestionarUsuario extends JFrame {
         JPanel panelCentral = ComponentesUI.crearPanel();
         panelCentral.setLayout(new BorderLayout(10, 10));
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        
+
         String[] columnas = {"ID", "Matrícula", "Nombre", "Rol", "Agrupación"};
         modeloTablaUsuarios = new DefaultTableModel(columnas, 0) {
             @Override
@@ -57,11 +55,7 @@ public class VentanaGestionarUsuario extends JFrame {
         };
         tablaUsuarios = new JTable(modeloTablaUsuarios);
         tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tablaUsuarios.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && tablaUsuarios.getSelectedRow() != -1) {
-                cargarDatosUsuarioSeleccionado();
-            }
-        });
+
         JScrollPane scrollTabla = new JScrollPane(tablaUsuarios);
         panelCentral.add(scrollTabla, BorderLayout.CENTER);
 
@@ -74,7 +68,7 @@ public class VentanaGestionarUsuario extends JFrame {
 
         panelEdicion.add(ComponentesUI.crearEtiqueta("Matrícula:"), gbc);
         campoMatriculaEdicion = ComponentesUI.crearCampoTexto();
-        campoMatriculaEdicion.setEditable(false); // La matrícula no se edita
+        campoMatriculaEdicion.setEditable(false);
         panelEdicion.add(campoMatriculaEdicion, gbc);
 
         panelEdicion.add(ComponentesUI.crearEtiqueta("Nombre:"), gbc);
@@ -83,14 +77,14 @@ public class VentanaGestionarUsuario extends JFrame {
         panelEdicion.add(campoNombreEdicion, gbc);
 
         panelEdicion.add(ComponentesUI.crearEtiqueta("Rol:"), gbc);
-        comboRolEdicion = new JComboBox<>(Modelo.RolUsuario.values());
+        comboRolEdicion = new JComboBox<>(RolUsuario.values());
         comboRolEdicion.setFont(new Font("Arial", Font.PLAIN, 14));
         panelEdicion.add(comboRolEdicion, gbc);
 
         JPanel panelBotonesEdicion = ComponentesUI.crearPanel();
         panelBotonesEdicion.setLayout(new GridLayout(1, 2, 10, 0));
-        JButton botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios", e -> guardarCambios());
-        JButton botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario", e -> eliminarUsuario());
+        botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios", null);
+        botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario", null);
         panelBotonesEdicion.add(botonGuardarCambios);
         panelBotonesEdicion.add(botonEliminar);
         gbc.insets = new Insets(15, 0, 5, 0);
@@ -99,23 +93,19 @@ public class VentanaGestionarUsuario extends JFrame {
         panelCentral.add(panelEdicion, BorderLayout.SOUTH);
 
         add(panelCentral, BorderLayout.CENTER);
-        
+
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         panelInferior.setLayout(new BorderLayout());
         JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
         panelInferior.add(botonCerrar, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
-
-        cargarUsuarios();
-        setVisible(true);
     }
 
-    private void cargarUsuarios() {
-        modeloTablaUsuarios.setRowCount(0);
-        String filtro = campoBusqueda.getText().toLowerCase();
-        List<Usuario> usuarios = controladorUsuario.listarUsuarios();
+    // --- MÉTODOS PARA EL CONTROLADOR ---
 
+    public void cargarUsuariosEnTabla(List<Usuario> usuarios, String filtro) {
+        modeloTablaUsuarios.setRowCount(0);
         for (Usuario user : usuarios) {
             if (filtro.isEmpty() || user.getMatricula().toLowerCase().contains(filtro) || user.getNombre().toLowerCase().contains(filtro)) {
                 modeloTablaUsuarios.addRow(new Object[]{user.getIdUsuario(), user.getMatricula(), user.getNombre(), user.getRol(), user.getIdAgrupacion()});
@@ -123,63 +113,51 @@ public class VentanaGestionarUsuario extends JFrame {
         }
     }
 
-    private void cargarDatosUsuarioSeleccionado() {
-        int filaSeleccionada = tablaUsuarios.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            String idUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 0);
-            Usuario usuario = controladorUsuario.buscarUsuarioPorId(idUsuario);
-            if (usuario != null) {
-                campoMatriculaEdicion.setText(usuario.getMatricula());
-                campoNombreEdicion.setText(usuario.getNombre());
-                comboRolEdicion.setSelectedItem(usuario.getRol());
-            }
+    public String getIdUsuarioSeleccionado() {
+        int fila = tablaUsuarios.getSelectedRow();
+        return (fila != -1) ? (String) modeloTablaUsuarios.getValueAt(fila, 0) : null;
+    }
+
+    public String getNombreUsuarioSeleccionado() {
+        int fila = tablaUsuarios.getSelectedRow();
+        return (fila != -1) ? (String) modeloTablaUsuarios.getValueAt(fila, 2) : null;
+    }
+
+    public void mostrarDatosUsuario(Usuario u) {
+        if (u != null) {
+            campoMatriculaEdicion.setText(u.getMatricula());
+            campoNombreEdicion.setText(u.getNombre());
+            comboRolEdicion.setSelectedItem(u.getRol());
         }
     }
 
-    private void guardarCambios() {
-        int filaSeleccionada = tablaUsuarios.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String idUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 0);
-        Modelo.RolUsuario nuevoRol = (Modelo.RolUsuario) comboRolEdicion.getSelectedItem();
-
-        try {
-            controladorUsuario.editarUsuarioComoAdmin(idUsuario, null, nuevoRol);
-            JOptionPane.showMessageDialog(this, "Usuario actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            cargarUsuarios();
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    public RolUsuario getRolSeleccionado() {
+        return (RolUsuario) comboRolEdicion.getSelectedItem();
     }
 
-    private void eliminarUsuario() {
-        int filaSeleccionada = tablaUsuarios.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    public String getTextoBusqueda() {
+        return campoBusqueda.getText().toLowerCase();
+    }
 
-        String idUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 0);
-        String nombreUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 2);
+    public void setBusquedaListener(DocumentListener listener) {
+        campoBusqueda.getDocument().addDocumentListener(listener);
+    }
 
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de que desea eliminar al usuario \"" + nombreUsuario + "\"? Esta acción es irreversible.",
-                "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+    public void setSeleccionTablaListener(javax.swing.event.ListSelectionListener listener) {
+        tablaUsuarios.getSelectionModel().addListSelectionListener(listener);
+    }
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            try {
-                controladorUsuario.eliminarUsuario(idUsuario);
-                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                cargarUsuarios();
-                campoMatriculaEdicion.setText("");
-                campoNombreEdicion.setText("");
-                comboRolEdicion.setSelectedIndex(0);
-            } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+    public void setGuardarListener(ActionListener listener) {
+        botonGuardarCambios.addActionListener(listener);
+    }
+
+    public void setEliminarListener(ActionListener listener) {
+        botonEliminar.addActionListener(listener);
+    }
+
+    public void limpiarCampos() {
+        campoMatriculaEdicion.setText("");
+        campoNombreEdicion.setText("");
+        comboRolEdicion.setSelectedIndex(0);
     }
 }

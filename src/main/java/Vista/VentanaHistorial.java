@@ -4,23 +4,23 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.List;
-import Modelo.Usuario;
-import Controlador.ControladorFinanzas;
 
+/**
+ * Vista para el historial de transacciones.
+ * MVC Puro: No conoce al controlador.
+ */
 public class VentanaHistorial extends JFrame {
-    private final Usuario usuario;
-    private final ControladorFinanzas controladorFinanzas;
     private DefaultTableModel modeloTabla;
     private JTable tablaMovimientos;
     private JFormattedTextField txtFecha;
     private JComboBox<String> cbTipo;
+    private JButton btnFiltrar;
+    private JButton btnVerComprobante;
 
-    public VentanaHistorial(ControladorFinanzas controladorFinanzas, Usuario usuario) {
-        this.controladorFinanzas = controladorFinanzas;
-        this.usuario = usuario;
-
+    public VentanaHistorial() {
         setTitle("CLARA - Historial de Transacciones");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -55,7 +55,8 @@ public class VentanaHistorial extends JFrame {
         cbTipo = new JComboBox<>(new String[]{"Todos", "INGRESO", "EGRESO"});
         panelFiltros.add(cbTipo);
 
-        panelFiltros.add(ComponentesUI.crearBoton("Filtrar", e -> ejecutarBusqueda()));
+        btnFiltrar = ComponentesUI.crearBoton("Filtrar", null);
+        panelFiltros.add(btnFiltrar);
 
         panelSuperior.add(panelFiltros, BorderLayout.SOUTH);
         add(panelSuperior, BorderLayout.NORTH);
@@ -80,34 +81,41 @@ public class VentanaHistorial extends JFrame {
         panelInferior.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 15));
         panelInferior.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
 
-        panelInferior.add(ComponentesUI.crearBoton("Ver Comprobante", e -> abrirComprobante()));
-        panelInferior.add(ComponentesUI.crearBoton("Cerrar", e -> dispose()));
+        btnVerComprobante = ComponentesUI.crearBoton("Ver Comprobante", null);
+        panelInferior.add(btnVerComprobante);
+        JButton btnCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
+        panelInferior.add(btnCerrar);
         add(panelInferior, BorderLayout.SOUTH);
-
-        ejecutarBusqueda();
-        setVisible(true);
     }
 
-    private void ejecutarBusqueda() {
+    public String getFechaFiltro() {
         String fechaRaw = txtFecha.getText().replace("_", "").replace("/", "").trim();
-        String fecha = fechaRaw.isEmpty() ? "" : txtFecha.getText();
-        String tipo = cbTipo.getSelectedItem().toString();
-        if (tipo.equals("Todos")) tipo = "";
+        return fechaRaw.isEmpty() ? "" : txtFecha.getText();
+    }
 
-        List<String[]> resultados = controladorFinanzas.filtrarMovimientos(usuario.getIdAgrupacion(), fecha, tipo);
+    public String getTipoFiltro() {
+        String tipo = cbTipo.getSelectedItem().toString();
+        return tipo.equals("Todos") ? "" : tipo;
+    }
+
+    public void cargarMovimientos(List<String[]> movimientos) {
         modeloTabla.setRowCount(0);
-        for (String[] fila : resultados) {
+        for (String[] fila : movimientos) {
             modeloTabla.addRow(fila);
         }
     }
 
-    private void abrirComprobante() {
+    public String getNombreComprobanteSeleccionado() {
         int fila = tablaMovimientos.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un movimiento.", "Atención", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        String nombre = modeloTabla.getValueAt(fila, 6).toString();
-        controladorFinanzas.pedirAbrirComprobante(nombre);
+        if (fila == -1) return null;
+        return modeloTabla.getValueAt(fila, 6).toString();
+    }
+
+    public void setFiltrarListener(ActionListener listener) {
+        btnFiltrar.addActionListener(listener);
+    }
+
+    public void setVerComprobanteListener(ActionListener listener) {
+        btnVerComprobante.addActionListener(listener);
     }
 }
