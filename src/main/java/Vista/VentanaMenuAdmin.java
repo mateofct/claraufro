@@ -1,22 +1,24 @@
-package Vista;
+VentanaMenuAdmin.java
+        1
+        100 %
+        package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+import Controlador.ControladorPrincipal;
 import Controlador.ControladorUsuario;
-import Controlador.ControladorFinanzas;
-import Controlador.ControladorAgrupacion;
 
+/**
+ * Menú principal para el Administrador.
+ * Ahora recibe al ControladorPrincipal para gestionar la navegación.
+ */
 public class VentanaMenuAdmin extends JFrame {
-    private ControladorUsuario controladorUsuario;
-    private ControladorFinanzas controladorFinanzas;
-    private ControladorAgrupacion controladorAgrupacion;
+    private ControladorPrincipal controladorPrincipal;
 
-    public VentanaMenuAdmin(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
-        this.controladorUsuario = controladorUsuario;
-        this.controladorFinanzas = controladorFinanzas;
-        this.controladorAgrupacion = controladorAgrupacion;
+    public VentanaMenuAdmin(ControladorPrincipal cp, ControladorUsuario cu) {
+        this.controladorPrincipal = cp;
 
-        String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
+        String nombreUsuario = cu.getUsuarioActivo().getNombre();
 
         setTitle("CLARA - Menú Administrador");
         setSize(500, 650);
@@ -59,22 +61,22 @@ public class VentanaMenuAdmin extends JFrame {
 
         // Sección Usuarios
         panelCentral.add(crearSeparador("USUARIOS"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Registrar usuario", e -> new VentanaCrearUsuario(controladorUsuario)), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Gestionar usuario", e -> new VentanaGestionarUsuario(controladorUsuario)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar usuario", e -> controladorPrincipal.mostrarRegistrarUsuario()), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Gestionar usuario", e -> controladorPrincipal.mostrarGestionarUsuarios()), gbc);
 
         panelCentral.add(Box.createVerticalStrut(15), gbc);
 
         // Sección Agrupaciones
         panelCentral.add(crearSeparador("AGRUPACIONES"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Registrar agrupación", e -> new VentanaCrearAgrupacion(controladorAgrupacion)), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Gestionar agrupación", e -> new VentanaGestionarAgrupacion(controladorAgrupacion)), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Gestionar miembros de agrupación", e -> new VentanaGestionarMiembros(controladorAgrupacion, controladorUsuario)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar agrupación", e -> controladorPrincipal.mostrarRegistrarAgrupacion()), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Gestionar agrupación", e -> controladorPrincipal.mostrarGestionarAgrupaciones()), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Gestionar miembros de agrupación", e -> controladorPrincipal.mostrarGestionarMiembros()), gbc);
 
         panelCentral.add(Box.createVerticalStrut(15), gbc);
 
         // Sección Personal
         panelCentral.add(crearSeparador("PERSONAL"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> new VentanaCambiarContrasena(controladorUsuario)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> controladorPrincipal.mostrarCambiarContrasena()), gbc);
 
         add(panelCentral, BorderLayout.CENTER);
 
@@ -84,9 +86,8 @@ public class VentanaMenuAdmin extends JFrame {
         panelInferior.setLayout(new BorderLayout());
 
         JButton botonCerrarSesion = ComponentesUI.crearBotonPeligro("Cerrar Sesión", e -> {
-            controladorUsuario.cerrarSesion();
             dispose();
-            new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
+            controladorPrincipal.cerrarSesion();
         });
         panelInferior.add(botonCerrarSesion, BorderLayout.CENTER);
 

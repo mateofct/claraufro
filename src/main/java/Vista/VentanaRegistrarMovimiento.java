@@ -2,23 +2,22 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.File;
-import Modelo.Usuario;
-import Modelo.TipoMovimiento;
-import Controlador.ControladorFinanzas;
 
+/**
+ * Vista para registrar un movimiento financiero.
+ * MVC Puro: No conoce al controlador.
+ */
 public class VentanaRegistrarMovimiento extends JFrame {
-    private ControladorFinanzas controladorFinanzas;
-    private Usuario usuario;
     private boolean esIngreso;
     private JTextField campoMonto;
     private JTextField campoDescripcion;
     private File archivoComprobante = null;
     private JButton botonSubirArchivo;
+    private JButton botonGuardar;
 
-    public VentanaRegistrarMovimiento(ControladorFinanzas controladorFinanzas, Usuario usuario, boolean esIngreso) {
-        this.controladorFinanzas = controladorFinanzas;
-        this.usuario = usuario;
+    public VentanaRegistrarMovimiento(boolean esIngreso, int saldoActual) {
         this.esIngreso = esIngreso;
 
         setTitle(esIngreso ? "CLARA - Registrar Ingreso" : "CLARA - Registrar Egreso");
@@ -38,7 +37,6 @@ public class VentanaRegistrarMovimiento extends JFrame {
         titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
         panelSuperior.add(titulo);
 
-        int saldoActual = controladorFinanzas.calcularSaldo(usuario.getIdAgrupacion());
         JLabel etiquetaSaldo = new JLabel("Saldo actual: $" + saldoActual);
         etiquetaSaldo.setFont(new Font("Arial", Font.ITALIC, 13));
         etiquetaSaldo.setForeground(Color.WHITE);
@@ -76,7 +74,7 @@ public class VentanaRegistrarMovimiento extends JFrame {
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 40, 40));
         panelInferior.setLayout(new GridLayout(1, 2, 15, 0));
 
-        JButton botonGuardar = ComponentesUI.crearBoton(esIngreso ? "Guardar Ingreso" : "Guardar Egreso", e -> guardarMovimiento());
+        botonGuardar = ComponentesUI.crearBoton(esIngreso ? "Guardar Ingreso" : "Guardar Egreso", null);
         if (esIngreso) {
             botonGuardar.setBackground(new Color(40, 167, 69));
             botonGuardar.setForeground(Color.WHITE);
@@ -91,8 +89,6 @@ public class VentanaRegistrarMovimiento extends JFrame {
         panelInferior.add(botonCancelar);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 
     private void seleccionarArchivo() {
@@ -106,28 +102,19 @@ public class VentanaRegistrarMovimiento extends JFrame {
         }
     }
 
-    private void guardarMovimiento() {
-        try {
-            String montoStr = campoMonto.getText().trim();
-            String desc = campoDescripcion.getText().trim();
+    public String getMonto() {
+        return campoMonto.getText().trim();
+    }
 
-            if (montoStr.isEmpty() || desc.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor complete el monto y la descripción.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+    public String getDescripcion() {
+        return campoDescripcion.getText().trim();
+    }
 
-            int monto = Integer.parseInt(montoStr);
-            TipoMovimiento tipo = esIngreso ? TipoMovimiento.INGRESO : TipoMovimiento.EGRESO;
-            String ruta = (archivoComprobante != null) ? archivoComprobante.getAbsolutePath() : "";
+    public String getRutaComprobante() {
+        return (archivoComprobante != null) ? archivoComprobante.getAbsolutePath() : "";
+    }
 
-            controladorFinanzas.registrarMovimiento(usuario.getIdAgrupacion(), tipo, monto, desc, ruta, usuario.getIdUsuario());
-            JOptionPane.showMessageDialog(this, "Movimiento registrado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El monto debe ser un número válido.", "Error de formato", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    public void setGuardarListener(ActionListener listener) {
+        botonGuardar.addActionListener(listener);
     }
 }
