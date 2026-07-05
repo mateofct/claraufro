@@ -17,27 +17,20 @@ public class Agrupacion {
         this.idMiembros = new ArrayList<>();
     }
 
-    public void agregarMiembro(String idUsuario) {
-        boolean miembroExiste = true;
-        for (String recorrerID : this.idMiembros) {
-            if (recorrerID.equals(idUsuario)) {
-                miembroExiste = false;
-                System.out.println("El usuario ya es miembro de la agrupación"); // CAMBIAR A VISTA
-                break;
-            }
-        }
-        if (miembroExiste) {
+    public boolean agregarMiembro(String idUsuario) {
+        if (!this.idMiembros.contains(idUsuario)) {
             this.idMiembros.add(idUsuario);
+            return true;
         }
+        return false;
     }
 
-    public void quitarMiembro(String idMiembro){
+    public boolean quitarMiembro(String idMiembro){
         if (this.idMiembros.contains(idMiembro)) {
             this.idMiembros.remove(idMiembro);
-            System.out.println("El usuario ha sido removido de la agrupación");
-        } else {
-            System.out.println("El usuario no es miembro de la agrupación");
+            return true;
         }
+        return false;
     }
 
     public String getIdAgrupacion() {

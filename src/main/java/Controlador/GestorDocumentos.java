@@ -62,8 +62,7 @@ public class GestorDocumentos {
 
     public void abrirComprobante(String nombreArchivo) {
         if (nombreArchivo.equals("sincomprobante.jpg") || nombreArchivo.equals("comprobante_default.jpg")) {
-            System.out.println("El movimiento no tiene un comprobante asociado.");
-            return;
+            throw  new IllegalArgumentException("El movimiento no tiene un comprobante asociado.");
         }
 
         File archivo = new File(RUTA_COMPROBANTES + "/" + nombreArchivo);
@@ -72,13 +71,13 @@ public class GestorDocumentos {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(archivo);
                 } else {
-                    System.out.println("El SO no soporta java.awt.Desktop.");
+                    throw  new IllegalArgumentException("El SO no soporta java.awt.Desktop.");
                 }
             } catch (IOException e) {
-                System.out.println("Error al abrir el archivo: " + e.getMessage());
+                throw  new IllegalArgumentException("Error al abrir el archivo: " + e.getMessage());
             }
         } else {
-            System.out.println("El comprobante ya no se encuentra en la carpeta.");
+            throw  new IllegalArgumentException("El comprobante ya no se encuentra en la carpeta.");
         }
     }
 }

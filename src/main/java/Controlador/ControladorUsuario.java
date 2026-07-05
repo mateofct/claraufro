@@ -20,10 +20,10 @@ public class ControladorUsuario {
 
         if (this.usuarios.isEmpty()) {
             try {
-                registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111K");
+                registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111k");
                 // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
-                registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222K");
-                registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "33333333333");
+                registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222k");
+                registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "3333333333k");
             } catch (Exception e) {
                 throw new RuntimeException("Error al registrar usuario inicial: " + e.getMessage());
             }
