@@ -93,11 +93,14 @@ public class VentanaGestionarMiembros extends JFrame {
         panelSur.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
         panelSur.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
+
         JButton botonMover = ComponentesUI.crearBoton("Trasladar a esta Agrupación", e -> trasladarMiembro());
         JButton botonQuitar = ComponentesUI.crearBotonPeligro("Dejar sin Agrupación", e -> quitarMiembro());
+        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
 
         panelSur.add(botonMover);
         panelSur.add(botonQuitar);
+        panelSur.add(botonCerrar);
 
         add(panelSur, BorderLayout.SOUTH);
 

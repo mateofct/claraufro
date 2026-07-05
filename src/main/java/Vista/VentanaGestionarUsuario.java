@@ -89,10 +89,8 @@ public class VentanaGestionarUsuario extends JFrame {
 
         JPanel panelBotonesEdicion = ComponentesUI.crearPanel();
         panelBotonesEdicion.setLayout(new GridLayout(1, 2, 10, 0));
-        JButton botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios",
-                e -> guardarCambios());
-        JButton botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario",
-                e -> eliminarUsuario());
+        JButton botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios", e -> guardarCambios());
+        JButton botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario", e -> eliminarUsuario());
         panelBotonesEdicion.add(botonGuardarCambios);
         panelBotonesEdicion.add(botonEliminar);
         gbc.insets = new Insets(15, 0, 5, 0);
@@ -105,8 +103,7 @@ public class VentanaGestionarUsuario extends JFrame {
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         panelInferior.setLayout(new BorderLayout());
-        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar",
-                e -> dispose());
+        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
         panelInferior.add(botonCerrar, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
 
