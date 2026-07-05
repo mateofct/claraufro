@@ -1,7 +1,6 @@
-VentanaIniciarSesion.java
-        1
-        100 %
-        package Vista;
+package Vista;
+
+import Vista.ComponentesUI;
 
 import javax.swing.*;
 import java.awt.*;
