@@ -52,6 +52,7 @@ public class Agrupacion {
     public List<String> getIdMiembros(){
         return this.idMiembros;
     }
+
     public void setNombreAgrupacion(String nombreAgrupacion){
         this.nombreAgrupacion = nombreAgrupacion;
     }

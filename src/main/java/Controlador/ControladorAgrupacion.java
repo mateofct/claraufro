@@ -20,6 +20,7 @@ public class ControladorAgrupacion {
         if (this.agrupaciones.isEmpty()) {
             Agrupacion principal = new Agrupacion("Sin Agrupación");
             principal.setIdAgrupacion(ID_AGRUPACION_PRINCIPAL);
+
             this.agrupaciones.add(principal);
             GestorArchivosCSV.guardarAgrupacion(principal);
         }
@@ -112,7 +113,7 @@ public class ControladorAgrupacion {
 
     public void eliminarAgrupacion(String idAgrupacion) {
         if (idAgrupacion.equals(ID_AGRUPACION_PRINCIPAL)) {
-            throw new IllegalStateException("No se puede eliminar la agrupación principal 'Sin Agrupación'.");
+            throw new IllegalArgumentException("No se puede eliminar la agrupación principal 'Sin Agrupación'.");
         }
 
         Agrupacion agrupacionAEliminar = buscarPorId(idAgrupacion);
