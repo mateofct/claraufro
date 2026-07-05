@@ -2,19 +2,20 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import Modelo.RolUsuario;
-import Modelo.Usuario;
-import Controlador.ControladorUsuario;
 
+/**
+ * Vista para registrar un nuevo usuario.
+ * MVC Puro: No conoce al controlador. Expone métodos para obtener datos y asignar listeners.
+ */
 public class VentanaCrearUsuario extends JFrame {
-    private ControladorUsuario controladorUsuario;
     private JTextField EscribirMatricula;
     private JPasswordField EscribirContraseña;
     private JComboBox<String> seleccionarRol;
+    private JButton btnRegistrar;
 
-    public VentanaCrearUsuario(ControladorUsuario controladorUsuario){
-        this.controladorUsuario = controladorUsuario;
-
+    public VentanaCrearUsuario(){
         setTitle("CLARA - Registrar nuevo usuario");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -55,37 +56,29 @@ public class VentanaCrearUsuario extends JFrame {
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 30, 40));
         panelInferior.setLayout(new GridLayout(1, 2, 10, 0));
 
-        JButton btnRegistrar = ComponentesUI.crearBoton("Registrar",
-                e -> guardarUsuario());
-        JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar",
-                e -> dispose());
+        btnRegistrar = ComponentesUI.crearBoton("Registrar", null);
+        JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar", e -> dispose());
 
         panelInferior.add(btnRegistrar);
         panelInferior.add(btnCancelar);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 
-    private void guardarUsuario() {
-        String matricula  = EscribirMatricula.getText().trim();
-        String contraseña = new String(EscribirContraseña.getPassword());
+    public String getMatricula() {
+        return EscribirMatricula.getText().trim();
+    }
 
-        if (matricula.isEmpty() || contraseña.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error de validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    public String getContrasena() {
+        return new String(EscribirContraseña.getPassword());
+    }
 
-        String rolSeleccionado = seleccionarRol.getSelectedItem().toString();
-        RolUsuario rol = rolSeleccionado.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
+    public RolUsuario getRolSeleccionado() {
+        String rol = seleccionarRol.getSelectedItem().toString();
+        return rol.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
+    }
 
-        try {
-            Usuario creado = controladorUsuario.registrarUsuario("agrup-001", rol, contraseña, matricula);
-            JOptionPane.showMessageDialog(this, "Usuario '" + creado.getNombre() + "' registrado correctamente");
-            dispose();
-        } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error al registrar", JOptionPane.ERROR_MESSAGE);
-        }
+    public void setRegistrarListener(ActionListener listener) {
+        btnRegistrar.addActionListener(listener);
     }
 }

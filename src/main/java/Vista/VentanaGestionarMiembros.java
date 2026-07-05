@@ -1,31 +1,30 @@
 package Vista;
 
-import Controlador.ControladorAgrupacion;
-import Controlador.ControladorUsuario;
 import Modelo.Agrupacion;
 import Modelo.Usuario;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Vista para gestionar miembros de agrupaciones.
+ * MVC Puro: No conoce al controlador.
+ */
 public class VentanaGestionarMiembros extends JFrame {
-    private ControladorAgrupacion controladorAgrupacion;
-    private ControladorUsuario controladorUsuario;
     private JComboBox<Agrupacion> comboAgrupaciones;
     private JTextField campoBusquedaUsuario;
     private JTable tablaCandidatos;
     private JTable tablaMiembros;
     private DefaultTableModel modeloTablaCandidatos;
     private DefaultTableModel modeloTablaMiembros;
+    private JButton botonMover;
+    private JButton botonQuitar;
 
-    public VentanaGestionarMiembros(ControladorAgrupacion controladorAgrupacion, ControladorUsuario controladorUsuario) {
-        this.controladorAgrupacion = controladorAgrupacion;
-        this.controladorUsuario = controladorUsuario;
-
+    public VentanaGestionarMiembros() {
         setTitle("CLARA - Traslado y Gestión de Miembros");
         setSize(1000, 650);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,7 +33,7 @@ public class VentanaGestionarMiembros extends JFrame {
         setLayout(new BorderLayout());
         ComponentesUI.configurarFondo(this);
 
-        // --- PANEL SUPERIOR (Selector de Agrupación y Búsqueda) ---
+        // --- PANEL SUPERIOR ---
         JPanel panelSuperior = ComponentesUI.crearPanel();
         panelSuperior.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -43,8 +42,6 @@ public class VentanaGestionarMiembros extends JFrame {
         comboAgrupaciones = new JComboBox<>();
         comboAgrupaciones.setFont(ComponentesUI.FUENTE_ETIQUETA);
         comboAgrupaciones.setPreferredSize(new Dimension(250, 35));
-        cargarAgrupacionesEnCombo();
-        comboAgrupaciones.addActionListener(e -> cargarUsuariosEnTablas());
         panelSuperior.add(comboAgrupaciones);
 
         panelSuperior.add(Box.createHorizontalStrut(30));
@@ -52,21 +49,16 @@ public class VentanaGestionarMiembros extends JFrame {
         panelSuperior.add(ComponentesUI.crearEtiqueta("Filtrar Usuarios:"));
         campoBusquedaUsuario = ComponentesUI.crearCampoTexto();
         campoBusquedaUsuario.setPreferredSize(new Dimension(200, 35));
-        campoBusquedaUsuario.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { cargarUsuariosEnTablas(); }
-            public void removeUpdate(DocumentEvent e) { cargarUsuariosEnTablas(); }
-            public void changedUpdate(DocumentEvent e) { cargarUsuariosEnTablas(); }
-        });
         panelSuperior.add(campoBusquedaUsuario);
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        // --- PANEL CENTRAL (Tablas) ---
+        // --- PANEL CENTRAL ---
         JPanel panelCentral = ComponentesUI.crearPanel();
         panelCentral.setLayout(new GridLayout(1, 2, 20, 0));
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Tabla de Candidatos (Todos los demás usuarios)
+        // Tabla Candidatos
         String[] columnasCandidatos = {"ID", "Matrícula", "Nombre", "Agrupación Actual"};
         modeloTablaCandidatos = new DefaultTableModel(columnasCandidatos, 0) {
             @Override
@@ -76,7 +68,7 @@ public class VentanaGestionarMiembros extends JFrame {
         JScrollPane scrollCandidatos = new JScrollPane(tablaCandidatos);
         panelCentral.add(crearPanelTabla("Usuarios Disponibles / De otras Agrupaciones", scrollCandidatos));
 
-        // Tabla de Miembros (Usuarios de la agrupación seleccionada)
+        // Tabla Miembros
         String[] columnasMiembros = {"ID", "Matrícula", "Nombre"};
         modeloTablaMiembros = new DefaultTableModel(columnasMiembros, 0) {
             @Override
@@ -88,14 +80,13 @@ public class VentanaGestionarMiembros extends JFrame {
 
         add(panelCentral, BorderLayout.CENTER);
 
-        // --- PANEL INFERIOR (Botones de Acción) ---
+        // --- PANEL INFERIOR ---
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
         panelInferior.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
-
-        JButton botonMover = ComponentesUI.crearBoton("Trasladar a esta Agrupación", e -> trasladarMiembro());
-        JButton botonQuitar = ComponentesUI.crearBotonPeligro("Dejar sin Agrupación", e -> quitarMiembro());
+        botonMover = ComponentesUI.crearBoton("Trasladar a esta Agrupación", null);
+        botonQuitar = ComponentesUI.crearBotonPeligro("Dejar sin Agrupación", null);
         JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
 
         panelInferior.add(botonMover);
@@ -103,103 +94,53 @@ public class VentanaGestionarMiembros extends JFrame {
         panelInferior.add(botonCerrar);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        cargarUsuariosEnTablas();
-        setVisible(true);
     }
 
-    private void cargarAgrupacionesEnCombo() {
+    public void setAgrupaciones(List<Agrupacion> agrupaciones) {
         comboAgrupaciones.removeAllItems();
-        for (Agrupacion ag : controladorAgrupacion.listarAgrupaciones()) {
-            comboAgrupaciones.addItem(ag);
-        }
+        for (Agrupacion a : agrupaciones) comboAgrupaciones.addItem(a);
     }
 
-    private void cargarUsuariosEnTablas() {
+    public Agrupacion getAgrupacionSeleccionada() {
+        return (Agrupacion) comboAgrupaciones.getSelectedItem();
+    }
+
+    public String getFiltro() {
+        return campoBusquedaUsuario.getText().toLowerCase();
+    }
+
+    public void cargarTablas(List<Object[]> candidatos, List<Object[]> miembros) {
         modeloTablaCandidatos.setRowCount(0);
+        for (Object[] fila : candidatos) modeloTablaCandidatos.addRow(fila);
+
         modeloTablaMiembros.setRowCount(0);
-
-        Agrupacion agrupacionSeleccionada = (Agrupacion) comboAgrupaciones.getSelectedItem();
-        if (agrupacionSeleccionada == null) return;
-
-        String filtro = campoBusquedaUsuario.getText().toLowerCase();
-        List<Usuario> todosLosUsuarios = controladorUsuario.listarUsuarios();
-
-        for (Usuario user : todosLosUsuarios) {
-            // No mostramos al Admin en la gestión de miembros
-            if (user.getRol() == Modelo.RolUsuario.ADMIN) continue;
-
-            boolean esMiembro = user.getIdAgrupacion().equals(agrupacionSeleccionada.getIdAgrupacion());
-            boolean coincideFiltro = filtro.isEmpty() ||
-                    user.getMatricula().toLowerCase().contains(filtro) ||
-                    user.getNombre().toLowerCase().contains(filtro);
-
-            if (coincideFiltro) {
-                if (esMiembro) {
-                    modeloTablaMiembros.addRow(new Object[]{user.getIdUsuario(), user.getMatricula(), user.getNombre()});
-                } else {
-                    Agrupacion actual = controladorAgrupacion.buscarPorId(user.getIdAgrupacion());
-                    String nombreAgrupacionActual = (actual != null) ? actual.getNombreAgrupacion() : "Ninguna";
-                    modeloTablaCandidatos.addRow(new Object[]{user.getIdUsuario(), user.getMatricula(), user.getNombre(), nombreAgrupacionActual});
-                }
-            }
-        }
+        for (Object[] fila : miembros) modeloTablaMiembros.addRow(fila);
     }
 
-    private void trasladarMiembro() {
-        int filaSeleccionada = tablaCandidatos.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario para trasladar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String idUsuario = (String) modeloTablaCandidatos.getValueAt(filaSeleccionada, 0);
-        Usuario usuario = controladorUsuario.buscarUsuarioPorId(idUsuario);
-        Agrupacion destino = (Agrupacion) comboAgrupaciones.getSelectedItem();
-
-        if (usuario != null && destino != null) {
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea trasladar a " + usuario.getNombre() + " a la agrupación " + destino.getNombreAgrupacion() + "?",
-                    "Confirmar Traslado", JOptionPane.YES_NO_OPTION);
-
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                try {
-                    controladorAgrupacion.agregarMiembro(destino.getIdAgrupacion(), usuario);
-                    JOptionPane.showMessageDialog(this, "Usuario trasladado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    cargarUsuariosEnTablas();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Error al trasladar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+    public String getIdCandidatoSeleccionado() {
+        int fila = tablaCandidatos.getSelectedRow();
+        return (fila != -1) ? (String) modeloTablaCandidatos.getValueAt(fila, 0) : null;
     }
 
-    private void quitarMiembro() {
-        int filaSeleccionada = tablaMiembros.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un miembro para dejar sin agrupación.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    public String getIdMiembroSeleccionado() {
+        int fila = tablaMiembros.getSelectedRow();
+        return (fila != -1) ? (String) modeloTablaMiembros.getValueAt(fila, 0) : null;
+    }
 
-        String idUsuario = (String) modeloTablaMiembros.getValueAt(filaSeleccionada, 0);
-        Usuario usuario = controladorUsuario.buscarUsuarioPorId(idUsuario);
-        Agrupacion actual = (Agrupacion) comboAgrupaciones.getSelectedItem();
+    public void setAgrupacionListener(ActionListener listener) {
+        comboAgrupaciones.addActionListener(listener);
+    }
 
-        if (usuario != null && actual != null) {
-            int confirmacion = JOptionPane.showConfirmDialog(this,
-                    "¿Desea quitar a " + usuario.getNombre() + " de la agrupación " + actual.getNombreAgrupacion() + "?",
-                    "Confirmar Acción", JOptionPane.YES_NO_OPTION);
+    public void setBusquedaListener(DocumentListener listener) {
+        campoBusquedaUsuario.getDocument().addDocumentListener(listener);
+    }
 
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                try {
-                    controladorAgrupacion.quitarMiembro(actual.getIdAgrupacion(), usuario);
-                    JOptionPane.showMessageDialog(this, "Usuario ahora se encuentra sin agrupación.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    cargarUsuariosEnTablas();
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+    public void setMoverListener(ActionListener listener) {
+        botonMover.addActionListener(listener);
+    }
+
+    public void setQuitarListener(ActionListener listener) {
+        botonQuitar.addActionListener(listener);
     }
 
     private JPanel crearPanelTabla(String titulo, JScrollPane scrollPane) {
