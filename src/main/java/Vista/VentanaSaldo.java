@@ -2,18 +2,14 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
-import Modelo.Usuario;
-import Controlador.ControladorFinanzas;
 
+/**
+ * Vista para mostrar el saldo.
+ * MVC Puro: No conoce al controlador. Recibe los datos ya calculados.
+ */
 public class VentanaSaldo extends JFrame {
-    private ControladorFinanzas controladorFinanzas;
-    private Usuario usuario;
 
-    public VentanaSaldo(ControladorFinanzas controladorFinanzas, Usuario usuario) {
-        this.controladorFinanzas = controladorFinanzas;
-        this.usuario = usuario;
-        int saldo = controladorFinanzas.calcularSaldo(usuario.getIdAgrupacion());
-
+    public VentanaSaldo(int saldo) {
         setTitle("CLARA - Saldo");
         setSize(400, 350);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -44,7 +40,5 @@ public class VentanaSaldo extends JFrame {
         JButton btnCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
         panelInferior.add(btnCerrar, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 }

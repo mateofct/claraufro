@@ -2,21 +2,20 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
+import Controlador.ControladorPrincipal;
 import Controlador.ControladorUsuario;
 import Controlador.ControladorFinanzas;
-import Controlador.ControladorAgrupacion;
 
+/**
+ * Menú principal para el Tesorero.
+ */
 public class VentanaMenuTesorero extends JFrame {
-    private ControladorUsuario controladorUsuario;
-    private ControladorFinanzas controladorFinanzas;
-    private ControladorAgrupacion controladorAgrupacion;
+    private ControladorPrincipal controladorPrincipal;
 
-    public VentanaMenuTesorero(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
-        this.controladorUsuario = controladorUsuario;
-        this.controladorFinanzas = controladorFinanzas;
-        this.controladorAgrupacion = controladorAgrupacion;
+    public VentanaMenuTesorero(ControladorPrincipal cp, ControladorUsuario cu, ControladorFinanzas cf) {
+        this.controladorPrincipal = cp;
 
-        String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
+        String nombreUsuario = cu.getUsuarioActivo().getNombre();
 
         setTitle("CLARA - Menú Tesorero");
         setSize(450, 600);
@@ -59,21 +58,21 @@ public class VentanaMenuTesorero extends JFrame {
 
         // Sección Consultas
         panelCentral.add(crearSeparador("CONSULTAS"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Ver saldo de la agrupación", e -> new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Ver historial de movimientos", e -> new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Ver saldo de la agrupación", e -> controladorPrincipal.mostrarVerSaldo()), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Ver historial de movimientos", e -> controladorPrincipal.mostrarHistorial()), gbc);
 
         panelCentral.add(Box.createVerticalStrut(15), gbc);
 
         // Sección Movimientos
         panelCentral.add(crearSeparador("MOVIMIENTOS"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Registrar ingreso (Verde)", e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), true)), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Registrar egreso (Rojo)", e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), false)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar ingreso (Verde)", e -> controladorPrincipal.mostrarRegistrarMovimiento(true)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar egreso (Rojo)", e -> controladorPrincipal.mostrarRegistrarMovimiento(false)), gbc);
 
         panelCentral.add(Box.createVerticalStrut(15), gbc);
 
         // Sección Personal
         panelCentral.add(crearSeparador("PERSONAL"), gbc);
-        panelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> new VentanaCambiarContrasena(controladorUsuario)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> controladorPrincipal.mostrarCambiarContrasena()), gbc);
 
         add(panelCentral, BorderLayout.CENTER);
 
@@ -83,9 +82,8 @@ public class VentanaMenuTesorero extends JFrame {
         panelInferior.setLayout(new BorderLayout());
 
         JButton btnCerrarSesion = ComponentesUI.crearBotonPeligro("Cerrar Sesión", e -> {
-            controladorUsuario.cerrarSesion();
             dispose();
-            new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
+            controladorPrincipal.cerrarSesion();
         });
         panelInferior.add(btnCerrarSesion, BorderLayout.CENTER);
 

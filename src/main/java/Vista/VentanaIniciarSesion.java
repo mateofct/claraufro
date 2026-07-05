@@ -1,24 +1,22 @@
-package Vista;
+VentanaIniciarSesion.java
+        1
+        100 %
+        package Vista;
 
 import javax.swing.*;
 import java.awt.*;
-import Controlador.ControladorUsuario;
-import Controlador.ControladorFinanzas;
-import Controlador.ControladorAgrupacion;
-import Modelo.Usuario;
 
+/**
+ * Vista para el inicio de sesión.
+ * Siguiendo el MVC puro, esta clase NO conoce a los controladores.
+ * Solo se encarga de la interfaz y de exponer los datos y componentes necesarios.
+ */
 public class VentanaIniciarSesion extends JFrame {
-    private ControladorUsuario controladorUsuario;
-    private ControladorFinanzas controladorFinanzas;
-    private ControladorAgrupacion controladorAgrupacion;
     private JTextField campoMatricula;
     private JPasswordField campoContrasena;
+    private JButton botonLogin;
 
-    public VentanaIniciarSesion(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
-        this.controladorUsuario = controladorUsuario;
-        this.controladorFinanzas = controladorFinanzas;
-        this.controladorAgrupacion = controladorAgrupacion;
-
+    public VentanaIniciarSesion() {
         setTitle("CLARA - Iniciar Sesión");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,40 +65,26 @@ public class VentanaIniciarSesion extends JFrame {
         panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 50, 60, 50));
         panelInferior.setLayout(new BorderLayout());
 
-        JButton botonLogin = ComponentesUI.crearBoton("Ingresar", e -> intentarLogin());
+        botonLogin = ComponentesUI.crearBoton("Ingresar", null); // El listener se asigna desde el controlador
         panelInferior.add(botonLogin, BorderLayout.CENTER);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 
-    private void intentarLogin() {
-        String matricula = campoMatricula.getText().trim();
-        String contrasena = new String(campoContrasena.getPassword());
+    // Métodos para que el controlador obtenga los datos
+    public String getMatricula() {
+        return campoMatricula.getText().trim();
+    }
 
-        if (matricula.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Los campos no deben de estar vacíos", "Campos incompletos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    public String getContrasena() {
+        return new String(campoContrasena.getPassword());
+    }
 
-        if (controladorUsuario.iniciarSesion(matricula, contrasena)) {
-            Usuario activo = controladorUsuario.getUsuarioActivo();
-            dispose();
-            switch (activo.getRol()) {
-                case ADMIN:
-                    new VentanaMenuAdmin(controladorUsuario, controladorFinanzas, controladorAgrupacion);
-                    break;
-                case TESORERO:
-                    new VentanaMenuTesorero(controladorUsuario, controladorFinanzas, controladorAgrupacion);
-                    break;
-                case SOCIO:
-                    new VentanaMenuSocio(controladorUsuario, controladorFinanzas, controladorAgrupacion);
-                    break;
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Matrícula o contraseña incorrectos.", "Error de acceso", JOptionPane.ERROR_MESSAGE);
-            campoContrasena.setText("");
-        }
+    public JButton getBotonIngresar() {
+        return botonLogin;
+    }
+
+    public void limpiarContrasena() {
+        campoContrasena.setText("");
     }
 }

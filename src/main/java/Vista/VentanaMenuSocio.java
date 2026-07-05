@@ -2,32 +2,29 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
-
-import Controlador.ControladorAgrupacion;
-import Controlador.ControladorFinanzas;
+import Controlador.ControladorPrincipal;
 import Controlador.ControladorUsuario;
+import Controlador.ControladorFinanzas;
 
+/**
+ * Menú principal para el Socio.
+ */
 public class VentanaMenuSocio extends JFrame {
-    private ControladorUsuario controladorUsuario;
-    private ControladorFinanzas controladorFinanzas;
-    private ControladorAgrupacion controladorAgrupacion;
+    private ControladorPrincipal controladorPrincipal;
 
-    public VentanaMenuSocio(ControladorUsuario controladorUsuario, ControladorFinanzas controladorFinanzas, ControladorAgrupacion controladorAgrupacion) {
-        String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
-        this.controladorUsuario = controladorUsuario;
-        this.controladorFinanzas = controladorFinanzas;
-        this.controladorAgrupacion = controladorAgrupacion;
+    public VentanaMenuSocio(ControladorPrincipal cp, ControladorUsuario cu, ControladorFinanzas cf) {
+        this.controladorPrincipal = cp;
+        String nombreUsuario = cu.getUsuarioActivo().getNombre();
 
-        setTitle("CLARA - Menu Socio");
-        setSize(400, 500); // Ajustado un poco para dar espacio al nuevo layout dinámico
+        setTitle("CLARA - Menú Socio");
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Usamos BorderLayout para organizar la ventana en regiones, igual que en el Admin
         setLayout(new BorderLayout());
         ComponentesUI.configurarFondo(this);
 
-        // --- PANEL SUPERIOR (Encabezado) ---
+        // --- PANEL SUPERIOR ---
         JPanel panelSuperior = ComponentesUI.crearPanel();
         panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -49,7 +46,7 @@ public class VentanaMenuSocio extends JFrame {
 
         add(panelSuperior, BorderLayout.NORTH);
 
-        // --- PANEL CENTRAL (Opciones) ---
+        // --- PANEL CENTRAL ---
         JPanel PanelCentral = ComponentesUI.crearPanel();
         PanelCentral.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -59,24 +56,23 @@ public class VentanaMenuSocio extends JFrame {
 
         // Sección Consultas
         PanelCentral.add(crearSeparador("CONSULTAS"), gbc);
-        PanelCentral.add(ComponentesUI.crearBoton("Ver saldo de mi agrupación", e -> new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
-        PanelCentral.add(ComponentesUI.crearBoton("Ver historial de movimientos", e -> new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
+        PanelCentral.add(ComponentesUI.crearBoton("Ver saldo de mi agrupación", e -> controladorPrincipal.mostrarVerSaldo()), gbc);
+        PanelCentral.add(ComponentesUI.crearBoton("Ver historial de movimientos", e -> controladorPrincipal.mostrarHistorial()), gbc);
         PanelCentral.add(Box.createVerticalStrut(15), gbc);
 
         // Sección Personal
         PanelCentral.add(crearSeparador("PERSONAL"), gbc);
-        PanelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> new VentanaCambiarContrasena(controladorUsuario)), gbc);
+        PanelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> controladorPrincipal.mostrarCambiarContrasena()), gbc);
         add(PanelCentral, BorderLayout.CENTER);
 
-        // --- PANEL INFERIOR (Cerrar Sesión) ---
+        // --- PANEL INFERIOR ---
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 40, 30, 40));
         panelInferior.setLayout(new BorderLayout());
 
         JButton botonCerrarSesion = ComponentesUI.crearBotonPeligro("Cerrar Sesión", e -> {
-            controladorUsuario.cerrarSesion();
             dispose();
-            new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
+            controladorPrincipal.cerrarSesion();
         });
 
         panelInferior.add(botonCerrarSesion, BorderLayout.CENTER);
@@ -90,7 +86,7 @@ public class VentanaMenuSocio extends JFrame {
         p.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel l = new JLabel(texto);
         l.setFont(new Font("Arial", Font.BOLD, 11));
-        l.setForeground(Color.BLACK); // Puedes cambiar a Color.GRAY si prefieres el estilo original
+        l.setForeground(Color.BLACK);
         p.add(l);
         return p;
     }
