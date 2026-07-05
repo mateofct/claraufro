@@ -1,13 +1,12 @@
 package Vista;
 
-import Controlador.ControladorAgrupacion;
-import Controlador.ControladorFinanzas;
-import Controlador.ControladorUsuario;
-
 import javax.swing.*;
 import java.awt.*;
+import Controlador.ControladorUsuario;
+import Controlador.ControladorFinanzas;
+import Controlador.ControladorAgrupacion;
 
-public class VentanaMenuTesorero extends JFrame{
+public class VentanaMenuTesorero extends JFrame {
     private ControladorUsuario controladorUsuario;
     private ControladorFinanzas controladorFinanzas;
     private ControladorAgrupacion controladorAgrupacion;
@@ -16,92 +15,92 @@ public class VentanaMenuTesorero extends JFrame{
         this.controladorUsuario = controladorUsuario;
         this.controladorFinanzas = controladorFinanzas;
         this.controladorAgrupacion = controladorAgrupacion;
+
         String nombreUsuario = controladorUsuario.getUsuarioActivo().getNombre();
 
-        setTitle("CLARA - Menu Tesorero");
-        setSize(400, 500);
+        setTitle("CLARA - Menú Tesorero");
+        setSize(450, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(102, 133, 183));
 
-        JLabel titulo = new JLabel("CLARA");
-        titulo.setFont(new Font("ROG Fonts Normal", Font.BOLD, 24));
-        titulo.setForeground(Color.WHITE);
-        titulo.setBounds(20, 10, 150, 35);
-        add(titulo);
+        setLayout(new BorderLayout());
+        ComponentesUI.configurarFondo(this);
 
-        JLabel saludo = new JLabel("Hola, " + nombreUsuario);
-        saludo.setFont(new Font("Arial", Font.PLAIN, 14));
-        saludo.setForeground(Color.WHITE);
-        saludo.setBounds(20, 45, 300, 25);
-        add(saludo);
+        // --- PANEL SUPERIOR ---
+        JPanel panelSuperior = ComponentesUI.crearPanel();
+        panelSuperior.setLayout(new BoxLayout(panelSuperior, BoxLayout.Y_AXIS));
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel titulo = ComponentesUI.crearTitulo("CLARA");
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSuperior.add(titulo);
+
+        panelSuperior.add(Box.createVerticalStrut(10));
+
+        JLabel saludo = ComponentesUI.crearEtiqueta("Hola, " + nombreUsuario);
+        saludo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSuperior.add(saludo);
 
         JLabel etiquetaRol = new JLabel("TESORERO");
-        etiquetaRol.setFont(new Font("Arial", Font.BOLD, 11));
+        etiquetaRol.setFont(new Font("Arial", Font.BOLD, 12));
         etiquetaRol.setForeground(new Color(200, 220, 255));
-        etiquetaRol.setBounds(20, 65, 200, 20);
-        add(etiquetaRol);
+        etiquetaRol.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelSuperior.add(etiquetaRol);
 
-        JLabel seccionMovimientos = new JLabel("MOVIMIENTOS");
-        seccionMovimientos.setFont(new Font("Arial", Font.BOLD, 11));
-        seccionMovimientos.setForeground(Color.GRAY);
-        seccionMovimientos.setBounds(20, 105, 200, 20);
-        add(seccionMovimientos);
+        add(panelSuperior, BorderLayout.NORTH);
 
-        JButton botonIngreso = new JButton("Registrar ingreso");
-        botonIngreso.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonIngreso.setBackground(Color.WHITE);
-        botonIngreso.setForeground(new Color(29, 130, 80));
-        botonIngreso.setBounds(20, 128, 350, 45);
-        botonIngreso.setHorizontalAlignment(JButton.LEFT);
-        botonIngreso.addActionListener(e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), true));
-        add(botonIngreso);
+        // --- PANEL CENTRAL ---
+        JPanel panelCentral = ComponentesUI.crearPanel();
+        panelCentral.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 40, 5, 40);
 
-        JButton botonEgreso = new JButton("Registrar egreso");
-        botonEgreso.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonEgreso.setBackground(Color.WHITE);
-        botonEgreso.setForeground(new Color(200, 50, 50));
-        botonEgreso.setBounds(20, 176, 350, 45);
-        botonEgreso.setFocusPainted(false);
-        botonEgreso.setHorizontalAlignment(JButton.LEFT);
-        botonEgreso.addActionListener(e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), false));
-        add(botonEgreso);
+        // Sección Consultas
+        panelCentral.add(crearSeparador("CONSULTAS"), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Ver saldo de la agrupación", e -> new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Ver historial de movimientos", e -> new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo())), gbc);
 
-        JLabel seccionConsultas = new JLabel("CONSULTAS");
-        seccionConsultas.setFont(new Font("Arial", Font.BOLD, 11));
-        seccionConsultas.setForeground(Color.GRAY);
-        seccionConsultas.setBounds(20, 235, 200, 20);
-        add(seccionConsultas);
+        panelCentral.add(Box.createVerticalStrut(15), gbc);
 
-        JButton botonVerSaldo = new JButton("Ver saldo actual");
-        botonVerSaldo.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonVerSaldo.setBackground(Color.WHITE);
-        botonVerSaldo.setBounds(20, 258, 350, 45);
-        botonVerSaldo.setFocusPainted(false);
-        botonVerSaldo.setHorizontalAlignment(JButton.LEFT);
-        botonVerSaldo.addActionListener(e -> new VentanaSaldo(controladorFinanzas, controladorUsuario.getUsuarioActivo()));
-        add(botonVerSaldo);
+        // Sección Movimientos
+        panelCentral.add(crearSeparador("MOVIMIENTOS"), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar ingreso (Verde)", e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), true)), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Registrar egreso (Rojo)", e -> new VentanaRegistrarMovimiento(controladorFinanzas, controladorUsuario.getUsuarioActivo(), false)), gbc);
 
-        JButton botonHistorial = new JButton("Ver historial de movimientos");
-        botonHistorial.setFont(new Font("Arial", Font.PLAIN, 14));
-        botonHistorial.setBackground(Color.WHITE);
-        botonHistorial.setBounds(20, 306, 350, 45);
-        botonHistorial.setHorizontalAlignment(JButton.LEFT);
-        botonHistorial.addActionListener(e -> new VentanaHistorial(controladorFinanzas, controladorUsuario.getUsuarioActivo()));
-        add(botonHistorial);
+        panelCentral.add(Box.createVerticalStrut(15), gbc);
 
-        JButton botonCerrarSesion = new JButton("Cerrar sesion");
-        botonCerrarSesion.setFont(new Font("Arial", Font.BOLD, 14));
-        botonCerrarSesion.setBackground(new Color(220, 50, 50));
-        botonCerrarSesion.setForeground(Color.WHITE);
-        botonCerrarSesion.setBounds(20, 410, 350, 45);
-        botonCerrarSesion.addActionListener(e ->{
-                controladorUsuario.cerrarSesion();
-                dispose();
-                new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
+        // Sección Personal
+        panelCentral.add(crearSeparador("PERSONAL"), gbc);
+        panelCentral.add(ComponentesUI.crearBoton("Cambiar contraseña", e -> new VentanaCambiarContrasena(controladorUsuario)), gbc);
+
+        add(panelCentral, BorderLayout.CENTER);
+
+        // --- PANEL INFERIOR ---
+        JPanel panelInferior = ComponentesUI.crearPanel();
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(20, 40, 30, 40));
+        panelInferior.setLayout(new BorderLayout());
+
+        JButton btnCerrarSesion = ComponentesUI.crearBotonPeligro("Cerrar Sesión", e -> {
+            controladorUsuario.cerrarSesion();
+            dispose();
+            new VentanaIniciarSesion(controladorUsuario, controladorFinanzas, controladorAgrupacion);
         });
-        add(botonCerrarSesion);
+        panelInferior.add(btnCerrarSesion, BorderLayout.CENTER);
+
+        add(panelInferior, BorderLayout.SOUTH);
+
         setVisible(true);
+    }
+
+    private JPanel crearSeparador(String texto) {
+        JPanel p = ComponentesUI.crearPanel();
+        p.setLayout(new FlowLayout(FlowLayout.LEFT));
+        JLabel l = new JLabel(texto);
+        l.setFont(new Font("Arial", Font.BOLD, 11));
+        l.setForeground(Color.BLACK);
+        p.add(l);
+        return p;
     }
 }

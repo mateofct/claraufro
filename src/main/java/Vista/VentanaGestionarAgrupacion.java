@@ -82,7 +82,7 @@ public class VentanaGestionarAgrupacion extends JFrame {
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         panelInferior.setLayout(new BorderLayout());
-        JButton botonCerrar = ComponentesUI.crearBoton("Cerrar",
+        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar",
                 e -> dispose());
         panelInferior.add(botonCerrar, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
