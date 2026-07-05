@@ -33,4 +33,4 @@ Permite el registro, seguimiento y auditoría transparente de ingresos y egresos
 - **Marcelo Alexis Vega Fernández**: Avance en el informe.
 - **Mateo Francisco Cortés Torres**: Programación de paquete `src/Main.Controlador` e integración arquitectónica.
 
-https://drive.google.com/file/d/1RcNOOX7uDPH17e2QLHA4GhcRRfhrY_pg/view?usp=sharing aquí esta la bas
+https://drive.google.com/file/d/1RcNOOX7uDPH17e2QLHA4GhcRRfhrY_pg/view?usp=sharing aquí esta la base de estudiantes universidad (independiente)
