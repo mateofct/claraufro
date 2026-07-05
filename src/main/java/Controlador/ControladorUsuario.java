@@ -31,8 +31,9 @@ public class ControladorUsuario {
     }
 
     public boolean iniciarSesion(String matricula, String contrasena) {
+        String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
         for (Usuario usuario : usuarios) {
-            if (usuario.getMatricula().equals(matricula)) {
+            if (usuario.getMatricula().equalsIgnoreCase(matriculaNormalizada)) {
                 String contrasenaDescifrada = GestorSeguridad.descifrar(usuario.getContraseña());
                 if (contrasenaDescifrada.equals(contrasena)) {
                     this.usuarioActivo = usuario;
@@ -45,8 +46,10 @@ public class ControladorUsuario {
 
     public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula){
 
+        String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
+
         for (Usuario u : usuarios) {
-            if (u.getMatricula().equals(matricula)) {
+            if (u.getMatricula().equalsIgnoreCase(matriculaNormalizada)) {
                 throw new IllegalArgumentException("La matricula ya existe en el registro de CLARA.");
             }
         }
