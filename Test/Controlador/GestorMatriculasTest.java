@@ -47,5 +47,4 @@ public class GestorMatriculasTest {
 
         assertTrue(GestorMatriculas.validarFormatoMatricula("  1111111111K  "));
     }
-
 }
