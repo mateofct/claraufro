@@ -1,6 +1,9 @@
 package Controlador;
 
 import Modelo.*;
+
+import javax.swing.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +91,11 @@ public class ControladorFinanzas {
     }
 
     public void pedirAbrirComprobante(String nombreArchivo) {
-        gestorDocumentos.abrirComprobante(nombreArchivo);
+        try {
+            gestorDocumentos.abrirComprobante(nombreArchivo);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error al abrir comprobante", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 }

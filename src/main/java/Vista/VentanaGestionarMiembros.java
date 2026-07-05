@@ -35,21 +35,21 @@ public class VentanaGestionarMiembros extends JFrame {
         ComponentesUI.configurarFondo(this);
 
         // --- PANEL SUPERIOR (Selector de Agrupación y Búsqueda) ---
-        JPanel panelNorte = ComponentesUI.crearPanel();
-        panelNorte.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
-        panelNorte.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        JPanel panelSuperior = ComponentesUI.crearPanel();
+        panelSuperior.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15));
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
-        panelNorte.add(ComponentesUI.crearEtiqueta("Agrupación a Gestionar:"));
+        panelSuperior.add(ComponentesUI.crearEtiqueta("Agrupación a Gestionar:"));
         comboAgrupaciones = new JComboBox<>();
         comboAgrupaciones.setFont(ComponentesUI.FUENTE_ETIQUETA);
         comboAgrupaciones.setPreferredSize(new Dimension(250, 35));
         cargarAgrupacionesEnCombo();
         comboAgrupaciones.addActionListener(e -> cargarUsuariosEnTablas());
-        panelNorte.add(comboAgrupaciones);
+        panelSuperior.add(comboAgrupaciones);
 
-        panelNorte.add(Box.createHorizontalStrut(30));
+        panelSuperior.add(Box.createHorizontalStrut(30));
 
-        panelNorte.add(ComponentesUI.crearEtiqueta("Filtrar Usuarios:"));
+        panelSuperior.add(ComponentesUI.crearEtiqueta("Filtrar Usuarios:"));
         campoBusquedaUsuario = ComponentesUI.crearCampoTexto();
         campoBusquedaUsuario.setPreferredSize(new Dimension(200, 35));
         campoBusquedaUsuario.getDocument().addDocumentListener(new DocumentListener() {
@@ -57,14 +57,14 @@ public class VentanaGestionarMiembros extends JFrame {
             public void removeUpdate(DocumentEvent e) { cargarUsuariosEnTablas(); }
             public void changedUpdate(DocumentEvent e) { cargarUsuariosEnTablas(); }
         });
-        panelNorte.add(campoBusquedaUsuario);
+        panelSuperior.add(campoBusquedaUsuario);
 
-        add(panelNorte, BorderLayout.NORTH);
+        add(panelSuperior, BorderLayout.NORTH);
 
         // --- PANEL CENTRAL (Tablas) ---
-        JPanel panelCentro = ComponentesUI.crearPanel();
-        panelCentro.setLayout(new GridLayout(1, 2, 20, 0));
-        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        JPanel panelCentral = ComponentesUI.crearPanel();
+        panelCentral.setLayout(new GridLayout(1, 2, 20, 0));
+        panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         // Tabla de Candidatos (Todos los demás usuarios)
         String[] columnasCandidatos = {"ID", "Matrícula", "Nombre", "Agrupación Actual"};
@@ -74,7 +74,7 @@ public class VentanaGestionarMiembros extends JFrame {
         };
         tablaCandidatos = new JTable(modeloTablaCandidatos);
         JScrollPane scrollCandidatos = new JScrollPane(tablaCandidatos);
-        panelCentro.add(crearPanelTabla("Usuarios Disponibles / De otras Agrupaciones", scrollCandidatos));
+        panelCentral.add(crearPanelTabla("Usuarios Disponibles / De otras Agrupaciones", scrollCandidatos));
 
         // Tabla de Miembros (Usuarios de la agrupación seleccionada)
         String[] columnasMiembros = {"ID", "Matrícula", "Nombre"};
@@ -84,25 +84,25 @@ public class VentanaGestionarMiembros extends JFrame {
         };
         tablaMiembros = new JTable(modeloTablaMiembros);
         JScrollPane scrollMiembros = new JScrollPane(tablaMiembros);
-        panelCentro.add(crearPanelTabla("Miembros Actuales de la Agrupación", scrollMiembros));
+        panelCentral.add(crearPanelTabla("Miembros Actuales de la Agrupación", scrollMiembros));
 
-        add(panelCentro, BorderLayout.CENTER);
+        add(panelCentral, BorderLayout.CENTER);
 
         // --- PANEL INFERIOR (Botones de Acción) ---
-        JPanel panelSur = ComponentesUI.crearPanel();
-        panelSur.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
-        panelSur.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+        JPanel panelInferior = ComponentesUI.crearPanel();
+        panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
 
         JButton botonMover = ComponentesUI.crearBoton("Trasladar a esta Agrupación", e -> trasladarMiembro());
         JButton botonQuitar = ComponentesUI.crearBotonPeligro("Dejar sin Agrupación", e -> quitarMiembro());
         JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
 
-        panelSur.add(botonMover);
-        panelSur.add(botonQuitar);
-        panelSur.add(botonCerrar);
+        panelInferior.add(botonMover);
+        panelInferior.add(botonQuitar);
+        panelInferior.add(botonCerrar);
 
-        add(panelSur, BorderLayout.SOUTH);
+        add(panelInferior, BorderLayout.SOUTH);
 
         cargarUsuariosEnTablas();
         setVisible(true);

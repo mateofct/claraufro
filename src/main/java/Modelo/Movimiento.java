@@ -15,7 +15,7 @@ public class Movimiento {
     private String idUsuarioQueRegistra;
 
 
-    public Movimiento(String idAgrupacion, TipoMovimiento tipoMovimiento, int monto, String descripcionMovimiento, String rutaComprobante, String idUsuarioQueRegistra ) {
+    public Movimiento(String idAgrupacion, TipoMovimiento tipoMovimiento, int monto, String descripcionMovimiento, String rutaComprobante, String idUsuarioQueRegistra) {
         this.idMovimiento = UUID.randomUUID().toString();
         this.idAgrupacion = idAgrupacion;
         this.tipoMovimiento = tipoMovimiento;
