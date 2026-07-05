@@ -144,20 +144,14 @@ public class VentanaGestionarUsuario extends JFrame {
         }
 
         String idUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 0);
-        String nuevoNombre = campoNombreEdicion.getText().trim();
         Modelo.RolUsuario nuevoRol = (Modelo.RolUsuario) comboRolEdicion.getSelectedItem();
 
-        if (nuevoNombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre del usuario no puede estar vacío.", "Error de validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         try {
-            controladorUsuario.editarUsuarioComoAdmin(idUsuario, nuevoNombre, nuevoRol);
+            controladorUsuario.editarUsuarioComoAdmin(idUsuario, null, nuevoRol);
             JOptionPane.showMessageDialog(this, "Usuario actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             cargarUsuarios();
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
