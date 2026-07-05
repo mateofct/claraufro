@@ -1,19 +1,20 @@
 package Vista;
 
-import Controlador.ControladorUsuario;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
+/**
+ * Vista para cambiar la contraseña.
+ * MVC Puro: No conoce al controlador.
+ */
 public class VentanaCambiarContrasena extends JFrame {
-    private ControladorUsuario controladorUsuario;
     private JPasswordField campoContrasenaActual;
     private JPasswordField campoNuevaContrasena;
     private JPasswordField campoConfirmarContrasena;
+    private JButton btnGuardar;
 
-    public VentanaCambiarContrasena(ControladorUsuario controladorUsuario) {
-        this.controladorUsuario = controladorUsuario;
-
+    public VentanaCambiarContrasena() {
         setTitle("CLARA - Cambiar Contraseña");
         setSize(400, 450);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -52,40 +53,28 @@ public class VentanaCambiarContrasena extends JFrame {
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 30, 40));
         panelInferior.setLayout(new GridLayout(1, 2, 10, 0));
 
-        JButton btnGuardar = ComponentesUI.crearBoton("Guardar Cambios",
-                e -> cambiarContrasena());
-        JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar",
-                e -> dispose());
+        btnGuardar = ComponentesUI.crearBoton("Guardar Cambios", null);
+        JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar", e -> dispose());
 
         panelInferior.add(btnGuardar);
         panelInferior.add(btnCancelar);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
 
-    private void cambiarContrasena() {
-        String contrasenaActual = new String(campoContrasenaActual.getPassword());
-        String nuevaContrasena = new String(campoNuevaContrasena.getPassword());
-        String confirmarContrasena = new String(campoConfirmarContrasena.getPassword());
+    public String getContrasenaActual() {
+        return new String(campoContrasenaActual.getPassword());
+    }
 
-        if (contrasenaActual.isEmpty() || nuevaContrasena.isEmpty() || confirmarContrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    public String getNuevaContrasena() {
+        return new String(campoNuevaContrasena.getPassword());
+    }
 
-        if (!nuevaContrasena.equals(confirmarContrasena)) {
-            JOptionPane.showMessageDialog(this, "La nueva contraseña y su confirmación no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    public String getConfirmacionContrasena() {
+        return new String(campoConfirmarContrasena.getPassword());
+    }
 
-        try {
-            controladorUsuario.cambiarPropiaContrasena(contrasenaActual, nuevaContrasena);
-            JOptionPane.showMessageDialog(this, "Contraseña cambiada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    public void setGuardarListener(ActionListener listener) {
+        btnGuardar.addActionListener(listener);
     }
 }

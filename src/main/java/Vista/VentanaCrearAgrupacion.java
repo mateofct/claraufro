@@ -2,15 +2,17 @@ package Vista;
 
 import javax.swing.*;
 import java.awt.*;
-import Controlador.ControladorAgrupacion;
+import java.awt.event.ActionListener;
 
+/**
+ * Vista para crear una agrupación.
+ * MVC Puro: No conoce al controlador.
+ */
 public class VentanaCrearAgrupacion extends JFrame {
-    private ControladorAgrupacion controladorAgrupacion;
     private JTextField nombreAgrupacion;
+    private JButton btnGuardar;
 
-    public VentanaCrearAgrupacion(ControladorAgrupacion controladorAgrupacion) {
-        this.controladorAgrupacion = controladorAgrupacion;
-
+    public VentanaCrearAgrupacion() {
         setTitle("CLARA - Crear Agrupación");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -23,7 +25,7 @@ public class VentanaCrearAgrupacion extends JFrame {
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
         panelSuperior.add(ComponentesUI.crearTitulo("Nueva Agrupación"));
         add(panelSuperior, BorderLayout.NORTH);
-        
+
         JPanel panelCentral = ComponentesUI.crearPanel();
         panelCentral.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -37,30 +39,25 @@ public class VentanaCrearAgrupacion extends JFrame {
         panelCentral.add(nombreAgrupacion, gbc);
 
         add(panelCentral, BorderLayout.CENTER);
-        
+
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 40, 30, 40));
         panelInferior.setLayout(new GridLayout(1, 2, 10, 0));
 
-        JButton btnGuardar = ComponentesUI.crearBoton("Crear", e -> crearAgrupacion());
+        btnGuardar = ComponentesUI.crearBoton("Crear", null);
         JButton btnCancelar = ComponentesUI.crearBotonPeligro("Cancelar", e -> dispose());
 
         panelInferior.add(btnGuardar);
         panelInferior.add(btnCancelar);
 
         add(panelInferior, BorderLayout.SOUTH);
-
-        setVisible(true);
     }
-    
-    private void crearAgrupacion() {
-        String nombre = nombreAgrupacion.getText().trim();
-        try {
-            controladorAgrupacion.crearAgrupacion(nombre);
-            JOptionPane.showMessageDialog(this, "Agrupación '" + nombre + "' creada.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error al crear la agrupación", JOptionPane.ERROR_MESSAGE);
-        }
+
+    public String getNombreAgrupacion() {
+        return nombreAgrupacion.getText().trim();
+    }
+
+    public void setGuardarListener(ActionListener listener) {
+        btnGuardar.addActionListener(listener);
     }
 }
