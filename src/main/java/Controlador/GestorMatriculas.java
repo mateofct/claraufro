@@ -20,6 +20,4 @@ public class GestorMatriculas {
         String matriculaNormalizada = normalizarMatricula(matricula);
         return Pattern.matches(PATRON_MATRICULA, matriculaNormalizada);
     }
-
-
 }

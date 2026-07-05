@@ -89,10 +89,8 @@ public class VentanaGestionarUsuario extends JFrame {
 
         JPanel panelBotonesEdicion = ComponentesUI.crearPanel();
         panelBotonesEdicion.setLayout(new GridLayout(1, 2, 10, 0));
-        JButton botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios",
-                e -> guardarCambios());
-        JButton botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario",
-                e -> eliminarUsuario());
+        JButton botonGuardarCambios = ComponentesUI.crearBoton("Guardar Cambios", e -> guardarCambios());
+        JButton botonEliminar = ComponentesUI.crearBotonPeligro("Eliminar Usuario", e -> eliminarUsuario());
         panelBotonesEdicion.add(botonGuardarCambios);
         panelBotonesEdicion.add(botonEliminar);
         gbc.insets = new Insets(15, 0, 5, 0);
@@ -105,8 +103,7 @@ public class VentanaGestionarUsuario extends JFrame {
         JPanel panelInferior = ComponentesUI.crearPanel();
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         panelInferior.setLayout(new BorderLayout());
-        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar",
-                e -> dispose());
+        JButton botonCerrar = ComponentesUI.crearBotonPeligro("Cerrar", e -> dispose());
         panelInferior.add(botonCerrar, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
 
@@ -147,20 +144,14 @@ public class VentanaGestionarUsuario extends JFrame {
         }
 
         String idUsuario = (String) modeloTablaUsuarios.getValueAt(filaSeleccionada, 0);
-        String nuevoNombre = campoNombreEdicion.getText().trim();
         Modelo.RolUsuario nuevoRol = (Modelo.RolUsuario) comboRolEdicion.getSelectedItem();
 
-        if (nuevoNombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre del usuario no puede estar vacío.", "Error de validación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         try {
-            controladorUsuario.editarUsuarioComoAdmin(idUsuario, nuevoNombre, nuevoRol);
+            controladorUsuario.editarUsuarioComoAdmin(idUsuario, null, nuevoRol);
             JOptionPane.showMessageDialog(this, "Usuario actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             cargarUsuarios();
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

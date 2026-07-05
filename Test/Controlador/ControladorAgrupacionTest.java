@@ -60,7 +60,7 @@ public class ControladorAgrupacionTest {
         ControladorUsuario controladorUsuario = new ControladorUsuario(new GestorEstudiantesUniversidad());
         ControladorAgrupacion controladorAgrupacion = new ControladorAgrupacion(controladorUsuario);
 
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             controladorAgrupacion.eliminarAgrupacion("agrup-001");
         });
     }

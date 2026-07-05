@@ -127,7 +127,7 @@ public class VentanaGestionarAgrupacion extends JFrame {
         }
         try {
             controladorAgrupacion.editarAgrupacion(idAgrupacion, nuevoNombre);
-            JOptionPane.showMessageDialog(this, "Agrupación actualizada exitosamente,", "Exito",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Agrupación actualizada exitosamente.", "Exito",  JOptionPane.INFORMATION_MESSAGE);
             cargarAgrupaciones();
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);

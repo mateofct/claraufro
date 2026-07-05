@@ -20,10 +20,10 @@ public class ControladorUsuario {
 
         if (this.usuarios.isEmpty()) {
             try {
-                registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111K");
+                registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "1111111111k");
                 // Los agregué para ver el POV sin tener que ingresar una matricula enorme siempre
-                registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222K");
-                registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "33333333333");
+                registrarUsuario("agrup-001", RolUsuario.TESORERO, "123", "2222222222k");
+                registrarUsuario("agrup-001", RolUsuario.SOCIO, "123", "3333333333k");
             } catch (Exception e) {
                 throw new RuntimeException("Error al registrar usuario inicial: " + e.getMessage());
             }
@@ -31,8 +31,9 @@ public class ControladorUsuario {
     }
 
     public boolean iniciarSesion(String matricula, String contrasena) {
+        String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
         for (Usuario usuario : usuarios) {
-            if (usuario.getMatricula().equals(matricula)) {
+            if (usuario.getMatricula().equalsIgnoreCase(matriculaNormalizada)) {
                 String contrasenaDescifrada = GestorSeguridad.descifrar(usuario.getContraseña());
                 if (contrasenaDescifrada.equals(contrasena)) {
                     this.usuarioActivo = usuario;
@@ -45,8 +46,10 @@ public class ControladorUsuario {
 
     public Usuario registrarUsuario(String idAgrupacion, RolUsuario rol, String contrasena, String matricula){
 
+        String matriculaNormalizada = GestorMatriculas.normalizarMatricula(matricula);
+
         for (Usuario u : usuarios) {
-            if (u.getMatricula().equals(matricula)) {
+            if (u.getMatricula().equalsIgnoreCase(matriculaNormalizada)) {
                 throw new IllegalArgumentException("La matricula ya existe en el registro de CLARA.");
             }
         }

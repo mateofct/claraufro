@@ -79,7 +79,7 @@ public class ControladorUsuarioTest {
         ControladorUsuario controlador = new ControladorUsuario(new GestorEstudiantesUniversidad());
         Usuario admin = controlador.registrarUsuario("agrup-001", RolUsuario.ADMIN, "123", "11111111106");
 
-        assertThrows(IllegalStateException.class, () -> {controlador.eliminarUsuario(admin.getIdUsuario());
+        assertThrows(IllegalArgumentException.class, () -> {controlador.eliminarUsuario(admin.getIdUsuario());
         });
     }
 
