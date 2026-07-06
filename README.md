@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Las credenciales por defecto son (Matrícula: 1111111111k, Contraseña: 123).
+
 # CLARA-UFRO
 **Cuentas Limpias y Auditoría de Recursos para Agrupaciones**
 
