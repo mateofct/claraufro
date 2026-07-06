@@ -6,15 +6,50 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Vista para el inicio de sesión.
- * Siguiendo el MVC puro, esta clase NO conoce a los controladores.
- * Solo se encarga de la interfaz y de exponer los datos y componentes necesarios.
+ * Ventana gráfica para el inicio de sesión en el sistema CLARA.
+ * <p>
+ * Según el patrón MVC puro, esta clase no conoce a los controladores.
+ * Se encarga exclusivamente de la interfaz gráfica y de exponer los datos
+ * ingresados por el usuario y los componentes necesarios para que el
+ * controlador principal pueda interactuar con ella.
+ * </p>
+ *
+ * <h3>Elementos de la interfaz:</h3>
+ * <ul>
+ *   <li>Panel superior: título "CLARA" y subtítulo "Gestión de Agrupaciones".</li>
+ *   <li>Panel central: campos de texto para matrícula y contraseña.</li>
+ *   <li>Panel inferior: botón "Ingresar" cuyo listener se asigna desde el controlador.</li>
+ * </ul>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal#mostrarLogin()
  */
 public class VentanaIniciarSesion extends JFrame {
+
+    /**
+     * Campo de texto donde el usuario ingresa su matrícula.
+     */
     private JTextField campoMatricula;
+
+    /**
+     * Campo de contraseña donde el usuario ingresa su contraseña.
+     */
     private JPasswordField campoContrasena;
+
+    /**
+     * Botón "Ingresar" que dispara el proceso de autenticación.
+     */
     private JButton botonLogin;
 
+    /**
+     * Constructor que construye y configura la ventana de inicio de sesión.
+     * <p>
+     * Configura el título, tamaño, comportamiento de cierre y posición
+     * centrada en pantalla. Utiliza {@link ComponentesUI} para garantizar
+     * un diseño visual consistente con el resto de la aplicación.
+     * </p>
+     */
     public VentanaIniciarSesion() {
         setTitle("CLARA - Iniciar Sesión");
         setSize(400, 500);
@@ -70,19 +105,38 @@ public class VentanaIniciarSesion extends JFrame {
         add(panelInferior, BorderLayout.SOUTH);
     }
 
-    // Métodos para que el controlador obtenga los datos
+    /**
+     * Obtiene el texto de la matrícula ingresado por el usuario,
+     * eliminando espacios en blanco extremos.
+     *
+     * @return la matrícula ingresada
+     */
     public String getMatricula() {
         return campoMatricula.getText().trim();
     }
 
+    /**
+     * Obtiene la contraseña ingresada por el usuario como cadena de texto.
+     *
+     * @return la contraseña ingresada
+     */
     public String getContrasena() {
         return new String(campoContrasena.getPassword());
     }
 
+    /**
+     * Obtiene una referencia al botón "Ingresar" para que el controlador
+     * pueda asignarle un {@link // ActionListener}.
+     *
+     * @return el botón de inicio de sesión
+     */
     public JButton getBotonIngresar() {
         return botonLogin;
     }
 
+    /**
+     * Limpia el campo de contraseña tras un intento de login fallido.
+     */
     public void limpiarContrasena() {
         campoContrasena.setText("");
     }

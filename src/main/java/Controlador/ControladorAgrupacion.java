@@ -4,30 +4,55 @@ import Modelo.Agrupacion;
 import Modelo.Usuario;
 import java.util.List;
 
-
 /**
- * Controla todo lo relacionado a agrupaciones, como crear una,
- * agergar o quitar miembros y cambiarlos de agrupación
+ * Controlador responsable de toda la lógica de negocio relacionada con las
+ * agrupaciones del sistema.
+ * <p>
+ * Permite crear, editar y eliminar agrupaciones, así como gestionar los
+ * miembros de cada una (trasladar usuarios entre agrupaciones y quitarlos).
+ * Existe una agrupación por defecto llamada "Sin Agrupación" (ID: {@code agrup-001})
+ * que no puede ser eliminada y sirve como destino para usuarios que no pertenecen
+ * a ninguna agrupación específica.
+ * </p>
  *
- * Hay una agrupación por defecto que se llama "Sin Agrupación"
- * esta agrupación no se puede eliminar.
+ * @author CLARA Team
+ * @version 1.0
  */
-
 public class ControladorAgrupacion {
 
+    /**
+     * Longitud máxima permitida para el nombre de una agrupación.
+     */
     private static final int MAX_LARGO_NOMBRE_AGRUPACION = 150;
+
+    /**
+     * Identificador de la agrupación principal ("Sin Agrupación") que no puede
+     * ser eliminada del sistema.
+     */
     private static final String ID_AGRUPACION_PRINCIPAL = "agrup-001";
 
+    /**
+     * Lista de todas las agrupaciones registradas en el sistema.
+     */
     private List<Agrupacion> agrupaciones;
+
+    /**
+     * Controlador de usuarios utilizado para actualizar la referencia de agrupación
+     * de los usuarios cuando se mueven entre agrupaciones.
+     */
     private ControladorUsuario controladorUsuario;
 
     /**
-     * constructor del controlador, que recibe como
-     * @param controladorUsuario, se usa para mover usuarios entre agrupaciones
-     * si no hay una agrupación existente, crea la agrupación por defecto
+     * Constructor del controlador de agrupaciones.
+     * <p>
+     * Carga las agrupaciones desde el almacenamiento CSV y, si no existe ninguna,
+     * crea automáticamente la agrupación por defecto "Sin Agrupación" con el ID
+     * {@value #ID_AGRUPACION_PRINCIPAL}.
+     * </p>
      *
+     * @param controladorUsuario el controlador de usuarios necesario para mover
+     *        usuarios entre agrupaciones
      */
-
     public ControladorAgrupacion(ControladorUsuario controladorUsuario) {
         this.agrupaciones = GestorArchivosCSV.cargarAgrupaciones();
         this.controladorUsuario = controladorUsuario;
@@ -42,13 +67,18 @@ public class ControladorAgrupacion {
     }
 
     /**
-     * Crea una nueva agrupación y recibe como
-     *@param nombre, que es el nombre de la nueva agrupación
+     * Crea una nueva agrupación con el nombre proporcionado.
+     * <p>
+     * Valida que el nombre no esté vacío, no exceda los 150 caracteres y no
+     * exista ya otra agrupación con el mismo nombre (insensible a mayúsculas/minúsculas).
+     * </p>
+     *
+     * @param nombre el nombre de la nueva agrupación
      * @return la agrupación recién creada
-     * @throws IllegalArgumentException, se lanza cuando el nombre está vacío, si supera
-     * el largo máximo permitido o si ya existe una agrupación con ese nombre
+     * @throws IllegalArgumentException si el nombre está vacío, supera los
+     *         {@value #MAX_LARGO_NOMBRE_AGRUPACION} caracteres, o ya existe
+     *         otra agrupación con ese nombre
      */
-
     public Agrupacion crearAgrupacion(String nombre) {
         if (nombre == null || nombre.isEmpty()) {
             throw new IllegalArgumentException("El nombre de la agrupación no puede estar vacío.");
@@ -71,17 +101,17 @@ public class ControladorAgrupacion {
         return nueva;
     }
 
-
     /**
-     * Agrega un usuario a una agrupación
-     * Si el usuario ya pertenecía a
-     * otra agrupación que no sea la de por defecto,
-     * primero se lo quita de ahi para que no quede en dos agrupaciones a la vez
+     * Agrega un usuario a una agrupación destino.
+     * <p>
+     * Si el usuario ya pertenecía a otra agrupación distinta de la principal
+     * ("Sin Agrupación"), primero se lo quita de su agrupación anterior para
+     * evitar que quede asociado a dos agrupaciones simultáneamente.
+     * </p>
      *
-     * Tiene como parámetros:
-     * @param idAgrupacion es el id de la agrupación destino
-     * @param usuario es el usuario que se va a agregar
-     * @throws IllegalArgumentException, se lanza si no existe la agrupación destino
+     * @param idAgrupacion el ID de la agrupación destino
+     * @param usuario el usuario que se desea agregar a la agrupación
+     * @throws IllegalArgumentException si no existe una agrupación con el ID destino
      */
     public void agregarMiembro(String idAgrupacion, Usuario usuario) {
         Agrupacion nuevaAgrupacion = buscarPorId(idAgrupacion);
@@ -106,14 +136,17 @@ public class ControladorAgrupacion {
     }
 
     /**
-     * Quita a un usuario de una agrupación, dejándolo en la agrupación
-     * por defecto
-     * Tiene los siguientes parámetros:
-     * @param idAgrupacion es el id de la agrupación de la que se va a quitar el usuario
-     * @param usuario es el usuario que se va a quitar
-     * @throws IllegalArgumentException, se lanza si no existe una agrupación con ese id
+     * Quita a un usuario de una agrupación, reasignándolo a la agrupación
+     * por defecto "Sin Agrupación".
+     * <p>
+     * El usuario no queda sin agrupación: siempre se le asigna la agrupación
+     * principal ({@value #ID_AGRUPACION_PRINCIPAL}) al ser removido.
+     * </p>
+     *
+     * @param idAgrupacion el ID de la agrupación de la que se desea quitar el usuario
+     * @param usuario el usuario que se desea remover de la agrupación
+     * @throws IllegalArgumentException si no existe una agrupación con el ID proporcionado
      */
-
     public void quitarMiembro(String idAgrupacion, Usuario usuario) {
         Agrupacion agrupacion = buscarPorId(idAgrupacion);
         if (agrupacion == null) {
@@ -127,12 +160,11 @@ public class ControladorAgrupacion {
     }
 
     /**
-     * Busca una agrupación por su id.
-     * Tiene los siguientes parametro:
-     * @param idAgrupacion es el id de la agrupación a buscar
+     * Busca una agrupación por su identificador único.
+     *
+     * @param idAgrupacion el ID de la agrupación a buscar
      * @return la agrupación encontrada, o {@code null} si no existe
      */
-
     public Agrupacion buscarPorId(String idAgrupacion) {
         for (Agrupacion a : agrupaciones) {
             if (a.getIdAgrupacion().equals(idAgrupacion)) {
@@ -142,18 +174,20 @@ public class ControladorAgrupacion {
         return null;
     }
 
-
     /**
-     * Cambia el nombre de una agrupación existente.
-     * Tiene los siguientes parametros:
-     * @param idAgrupacion es el id de la agrupación a editar
-     * @param nuevoNombre es el nuevo nombre para la agrupación
-     * @throws IllegalArgumentException, se lanza si no existe una agrupación con
-     * ese id, si el nuevo nombre está vacío, si supera el largo
-     * máximo permitido, o si ya existe otra agrupación con ese nombre
+     * Edita el nombre de una agrupación existente.
+     * <p>
+     * Valida que la agrupación exista, que el nuevo nombre no esté vacío,
+     * no exceda los 150 caracteres y no coincida con el nombre de otra
+     * agrupación existente (insensible a mayúsculas/minúsculas).
+     * </p>
+     *
+     * @param idAgrupacion el ID de la agrupación a editar
+     * @param nuevoNombre el nuevo nombre para la agrupación
+     * @throws IllegalArgumentException si la agrupación no existe, el nombre
+     *         está vacío, supera los {@value #MAX_LARGO_NOMBRE_AGRUPACION}
+     *         caracteres, o ya existe otra agrupación con ese nombre
      */
-
-
     public void editarAgrupacion(String idAgrupacion, String nuevoNombre) {
         Agrupacion agrupacion = buscarPorId(idAgrupacion);
         if (agrupacion == null) {
@@ -174,18 +208,18 @@ public class ControladorAgrupacion {
         GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
     }
 
-
     /**
-     * Elimina una agrupación
-     * Antes de eliminarla, mueve a todos sus miembros a la agrupación principal,
-     * para que ningún usuario quede sin agrupación.
-     * Tiene los siguientes parametros:
-     * @param idAgrupacion es el id de la agrupación a eliminar
-     * @throws IllegalArgumentException, se lanza si se intenta eliminar la
-     * agrupación principal o si la agrupación a eliminar no existe
+     * Elimina una agrupación del sistema.
+     * <p>
+     * Antes de eliminarla, reasigna todos sus miembros a la agrupación principal
+     * "Sin Agrupación" para garantizar que ningún usuario quede sin agrupación.
+     * No permite eliminar la agrupación principal.
+     * </p>
+     *
+     * @param idAgrupacion el ID de la agrupación a eliminar
+     * @throws IllegalArgumentException si se intenta eliminar la agrupación
+     *         principal o si la agrupación a eliminar no existe
      */
-
-
     public void eliminarAgrupacion(String idAgrupacion) {
         if (idAgrupacion.equals(ID_AGRUPACION_PRINCIPAL)) {
             throw new IllegalArgumentException("No se puede eliminar la agrupación principal 'Sin Agrupación'.");
@@ -205,6 +239,11 @@ public class ControladorAgrupacion {
         GestorArchivosCSV.guardarTodasAgrupaciones(agrupaciones);
     }
 
+    /**
+     * Retorna la lista de todas las agrupaciones registradas en el sistema.
+     *
+     * @return lista de agrupaciones (puede incluir la agrupación principal)
+     */
     public List<Agrupacion> listarAgrupaciones() {
         return agrupaciones;
     }

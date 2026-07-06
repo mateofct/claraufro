@@ -5,10 +5,29 @@ import java.awt.*;
 
 /**
  * Vista para mostrar el saldo.
+ * <p>
  * MVC Puro: No conoce al controlador. Recibe los datos ya calculados.
+ * Es una ventana informativa de solo lectura que presenta el saldo calculado
+ * por el controlador financiero con un diseño visual destacado (fuente grande
+ * de 48pt en blanco).
+ * </p>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal#mostrarVerSaldo()
  */
 public class VentanaSaldo extends JFrame {
 
+    /**
+     * Constructor que construye y configura la ventana del saldo.
+     * <p>
+     * Configura el título, tamaño, comportamiento de cierre y posición
+     * centrada en pantalla. Utiliza {@link ComponentesUI} para garantizar
+     * un diseño visual consistente con el resto de la aplicación.
+     * </p>
+     *
+     * @param saldo el saldo total de la agrupación a mostrar
+     */
     public VentanaSaldo(int saldo) {
         setTitle("CLARA - Saldo");
         setSize(400, 350);

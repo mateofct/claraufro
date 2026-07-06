@@ -6,12 +6,37 @@ import java.awt.event.ActionListener;
 
 /**
  * Vista para crear una agrupación.
- * MVC Puro: No conoce al controlador.
+ * <p>
+ * MVC Puro: No conoce al controlador. Expone el nombre de la agrupación
+ * ingresado en el campo de texto y un {@link ActionListener} para el
+ * botón de crear que el controlador principal asigna mediante
+ * {@link #setGuardarListener(ActionListener)}.
+ * </p>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal#mostrarRegistrarAgrupacion()
  */
 public class VentanaCrearAgrupacion extends JFrame {
+
+    /**
+     * Campo de texto donde el usuario ingresa el nombre de la nueva agrupación.
+     */
     private JTextField nombreAgrupacion;
+
+    /**
+     * Botón para crear la nueva agrupación.
+     */
     private JButton btnGuardar;
 
+    /**
+     * Constructor que construye y configura la ventana de creación de agrupación.
+     * <p>
+     * Configura el título, tamaño, comportamiento de cierre y posición
+     * centrada en pantalla. Utiliza {@link ComponentesUI} para garantizar
+     * un diseño visual consistente con el resto de la aplicación.
+     * </p>
+     */
     public VentanaCrearAgrupacion() {
         setTitle("CLARA - Crear Agrupación");
         setSize(400, 300);
@@ -53,10 +78,21 @@ public class VentanaCrearAgrupacion extends JFrame {
         add(panelInferior, BorderLayout.SOUTH);
     }
 
+    /**
+     * Obtiene el nombre de la agrupación ingresado en el campo de texto.
+     *
+     * @return el nombre sin espacios extremos
+     */
     public String getNombreAgrupacion() {
         return nombreAgrupacion.getText().trim();
     }
 
+    /**
+     * Registra un {@link ActionListener} para el botón "Crear" que el
+     * controlador principal asignará para procesar la nueva agrupación.
+     *
+     * @param listener el listener a ejecutar al presionar "Crear"
+     */
     public void setGuardarListener(ActionListener listener) {
         btnGuardar.addActionListener(listener);
     }

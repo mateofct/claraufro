@@ -7,14 +7,56 @@ import Modelo.RolUsuario;
 
 /**
  * Vista para registrar un nuevo usuario.
- * MVC Puro: No conoce al controlador. Expone métodos para obtener datos y asignar listeners.
+ * <p>
+ * MVC Puro: No conoce al controlador. Expone métodos para obtener datos
+ * y asignar listeners. Los roles disponibles son Tesorero y Socio
+ * (el administrador se crea automáticamente en la inicialización).
+ * </p>
+ *
+ * <h3>Elementos de la interfaz:</h3>
+ * <table border="1" cellpadding="4" cellspacing="0">
+ *   <caption>Campos del formulario de registro</caption>
+ *   <tr><th>Elemento</th><th>Descripción</th></tr>
+ *   <tr><td>Campo "Matrícula"</td><td>11 caracteres (dígitos 0-9 y letra 'k')</td></tr>
+ *   <tr><td>Campo "Contraseña"</td><td>Máximo 24 caracteres</td></tr>
+ *   <tr><td>Combo "Rol del usuario"</td><td>Solo Tesorero y Socio</td></tr>
+ * </table>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal#mostrarRegistrarUsuario()
  */
 public class VentanaCrearUsuario extends JFrame {
+
+    /**
+     * Campo de texto donde se ingresa la matrícula del estudiante a registrar.
+     */
     private JTextField EscribirMatricula;
+
+    /**
+     * Campo de contraseña donde se ingresa la contraseña del nuevo usuario.
+     */
     private JPasswordField EscribirContraseña;
+
+    /**
+     * Combo box para seleccionar el rol del nuevo usuario.
+     * Solo permite Tesorero y Socio.
+     */
     private JComboBox<String> seleccionarRol;
+
+    /**
+     * Botón para registrar el nuevo usuario.
+     */
     private JButton btnRegistrar;
 
+    /**
+     * Constructor que construye y configura la ventana de registro de usuario.
+     * <p>
+     * Configura el título, tamaño, comportamiento de cierre y posición
+     * centrada en pantalla. Utiliza {@link ComponentesUI} para garantizar
+     * un diseño visual consistente con el resto de la aplicación.
+     * </p>
+     */
     public VentanaCrearUsuario(){
         setTitle("CLARA - Registrar nuevo usuario");
         setSize(400, 500);
@@ -65,19 +107,46 @@ public class VentanaCrearUsuario extends JFrame {
         add(panelInferior, BorderLayout.SOUTH);
     }
 
+    /**
+     * Obtiene la matrícula ingresada en el campo de texto.
+     *
+     * @return la matrícula como cadena de texto sin espacios extremos
+     */
     public String getMatricula() {
         return EscribirMatricula.getText().trim();
     }
 
+    /**
+     * Obtiene la contraseña ingresada en el campo de contraseña.
+     *
+     * @return la contraseña como cadena de texto
+     */
     public String getContrasena() {
         return new String(EscribirContraseña.getPassword());
     }
 
+    /**
+     * Obtiene el rol seleccionado en el combo box y lo retorna como
+     * una constante del enum {@link RolUsuario}.
+     * <p>
+     * Las opciones "Tesorero" y "Socio" del combo se mapean a
+     * {@link RolUsuario#TESORERO} y {@link RolUsuario#SOCIO} respectivamente.
+     * </p>
+     *
+     * @return el rol seleccionado ({@link RolUsuario#TESORERO} o
+     *         {@link RolUsuario#SOCIO})
+     */
     public RolUsuario getRolSeleccionado() {
         String rol = seleccionarRol.getSelectedItem().toString();
         return rol.equals("Tesorero") ? RolUsuario.TESORERO : RolUsuario.SOCIO;
     }
 
+    /**
+     * Registra un {@link ActionListener} para el botón "Registrar" que el
+     * controlador principal asignará para procesar el nuevo usuario.
+     *
+     * @param listener el listener a ejecutar al presionar "Registrar"
+     */
     public void setRegistrarListener(ActionListener listener) {
         btnRegistrar.addActionListener(listener);
     }

@@ -7,11 +7,58 @@ import Controlador.ControladorUsuario;
 import Controlador.ControladorFinanzas;
 
 /**
- * Menú principal para el Tesorero.
+ * Menú principal de la aplicación para usuarios con rol de tesorero.
+ * <p>
+ * Según el patrón MVC puro, esta clase no contiene lógica de negocio.
+ * Recibe una referencia al {@link ControladorPrincipal} para gestionar
+ * la navegación entre ventanas, al {@link ControladorUsuario} para obtener
+ * el nombre del usuario activo, y al {@link ControladorFinanzas} (que
+ * aunque se recibe no se utiliza directamente en esta vista).
+ * </p>
+ *
+ * <h3>Secciones del menú:</h3>
+ * <table border="1" cellpadding="4" cellspacing="0">
+ *   <caption>Opciones del tesorero</caption>
+ *   <tr><th>Sección</th><th>Opciones</th></tr>
+ *   <tr>
+ *     <td><strong>Consultas</strong></td>
+ *     <td>Ver saldo de la agrupación, Ver historial de movimientos</td>
+ *   </tr>
+ *   <tr>
+ *     <td><strong>Movimientos</strong></td>
+ *     <td>Registrar ingreso (botón verde), Registrar egreso (botón rojo)</td>
+ *   </tr>
+ *   <tr>
+ *     <td><strong>Personal</strong></td>
+ *     <td>Cambiar contraseña</td>
+ *   </tr>
+ * </table>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal
  */
 public class VentanaMenuTesorero extends JFrame {
+
+    /**
+     * Referencia al controlador principal para gestionar la navegación
+     * entre ventanas.
+     */
     private ControladorPrincipal controladorPrincipal;
 
+    /**
+     * Constructor que construye y configura la ventana del menú del tesorero.
+     * <p>
+     * Muestra un saludo con el nombre del usuario y su rol, seguido de las
+     * opciones organizadas en secciones de consultas, movimientos y personal.
+     * Cada botón invoca directamente un método del controlador principal.
+     * </p>
+     *
+     * @param cp el controlador principal que orquesta la navegación
+     * @param cu el controlador de usuarios para obtener el nombre del activo
+     * @param cf el controlador de finanzas (recibido pero no usado directamente
+     *        en esta vista)
+     */
     public VentanaMenuTesorero(ControladorPrincipal cp, ControladorUsuario cu, ControladorFinanzas cf) {
         this.controladorPrincipal = cp;
 
@@ -92,6 +139,13 @@ public class VentanaMenuTesorero extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Crea un panel separador con una etiqueta de texto en negrita
+     * utilizada como título de sección en el menú.
+     *
+     * @param texto el texto del separador
+     * @return el panel con la etiqueta de sección
+     */
     private JPanel crearSeparador(String texto) {
         JPanel p = ComponentesUI.crearPanel();
         p.setLayout(new FlowLayout(FlowLayout.LEFT));

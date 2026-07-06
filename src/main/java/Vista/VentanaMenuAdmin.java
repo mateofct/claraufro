@@ -7,12 +7,55 @@ import Controlador.ControladorUsuario;
 import Vista.ComponentesUI;
 
 /**
- * Menú principal para el Administrador.
- * Ahora recibe al ControladorPrincipal para gestionar la navegación.
+ * Menú principal de la aplicación para usuarios con rol de administrador.
+ * <p>
+ * Según el patrón MVC puro, esta clase no contiene lógica de negocio.
+ * Recibe una referencia al {@link ControladorPrincipal} para gestionar
+ * la navegación entre ventanas, y al {@link ControladorUsuario} para
+ * obtener el nombre del usuario activo y mostrarlo en el saludo.
+ * </p>
+ *
+ * <h3>Secciones del menú:</h3>
+ * <table border="1" cellpadding="4" cellspacing="0">
+ *   <caption>Opciones del administrador</caption>
+ *   <tr><th>Sección</th><th>Opciones</th></tr>
+ *   <tr>
+ *     <td><strong>Usuarios</strong></td>
+ *     <td>Registrar usuario, Gestionar usuario</td>
+ *   </tr>
+ *   <tr>
+ *     <td><strong>Agrupaciones</strong></td>
+ *     <td>Registrar agrupación, Gestionar agrupación, Gestionar miembros</td>
+ *   </tr>
+ *   <tr>
+ *     <td><strong>Personal</strong></td>
+ *     <td>Cambiar contraseña</td>
+ *   </tr>
+ * </table>
+ *
+ * @author CLARA Team
+ * @version 1.0
+ * @see Controlador.ControladorPrincipal
  */
 public class VentanaMenuAdmin extends JFrame {
+
+    /**
+     * Referencia al controlador principal para gestionar la navegación
+     * entre ventanas.
+     */
     private ControladorPrincipal controladorPrincipal;
 
+    /**
+     * Constructor que construye y configura la ventana del menú del administrador.
+     * <p>
+     * Muestra un saludo con el nombre del usuario y su rol, seguido de las
+     * opciones organizadas en secciones. Cada botón invoca directamente un
+     * método del controlador principal mediante lambdas.
+     * </p>
+     *
+     * @param cp el controlador principal que orquesta la navegación
+     * @param cu el controlador de usuarios para obtener el nombre del activo
+     */
     public VentanaMenuAdmin(ControladorPrincipal cp, ControladorUsuario cu) {
         this.controladorPrincipal = cp;
 
@@ -94,6 +137,13 @@ public class VentanaMenuAdmin extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Crea un panel separador con una etiqueta de texto en negrita
+     * utilizada como título de sección en el menú.
+     *
+     * @param texto el texto del separador
+     * @return el panel con la etiqueta de sección
+     */
     private JPanel crearSeparador(String texto) {
         JPanel p = ComponentesUI.crearPanel();
         p.setLayout(new FlowLayout(FlowLayout.LEFT));
